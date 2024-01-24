@@ -29,7 +29,7 @@ class Crud
         $stmt->bindParam(":qtd_periodos_ferias", $qtd_periodos_ferias, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
-            header("Location: ../templates/listar.php");
+            header("Location:listar.php");
             exit();
         } else {
             echo "Erro na execução da consulta: " . $stmt->errorInfo()[2];
@@ -74,7 +74,7 @@ class Crud
                 echo "<td>" . $row['motivo_informacao'] . "</td>";
                 echo "<td>" . $row['qtd_periodos_ferias'] . "</td>";
                 echo "<td>
-                        <a href='../templates/editar_cadastrar.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i> </a>
+                        <a href='editar_cadastrar.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i> </a>
                         <a href='#' onclick='confirmarExclusao(" . $row['id'] . ")'><i class='fas fa-trash-alt'></i> </a>
                         </td>";
                 echo "</tr>";

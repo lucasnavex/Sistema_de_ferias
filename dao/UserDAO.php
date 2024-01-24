@@ -151,7 +151,7 @@
       if($redirect) {
 
         // Redireciona e apresenta mensagem de sucesso
-        $this->message->setMessage("Seja bem-vindo!", "success", "editprofile.php");
+        $this->message->setMessage("Seja bem-vindo!", "success", "listar.php");
 
       }
 

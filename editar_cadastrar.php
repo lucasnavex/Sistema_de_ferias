@@ -1,6 +1,6 @@
 <?php
-include '../dao/formulario.php';
-
+include './dao/formulario.php';
+require_once("templates/header.php");
 $crud = new Crud($conn);
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $crud->atualizar($id, $nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $gestor, $motivo_informacao, $qtd_periodos_ferias);
 
         // Redirecionar para listar.php após a atualização
-        header("Location: ../pages/listar.php");
+        header("Location: listar.php");
         exit();
     } else {
         // Se for uma operação de cadastro, chame o método de cadastro
@@ -33,20 +33,7 @@ $registro = $id ? $crud->editar($id) : null;
 
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $id ? 'Formulário de Edição' : 'Formulário de Cadastro'; ?></title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-
-<body>
-    <nav>
-        GERENCIADOR DE REGISTRO DE FÉRIAS
-    </nav>
 
     <form action="?action=<?php echo $id ? 'atualizar&id=' . $id : 'cadastrar'; ?>" method="post">
         <h2><?php echo $id ? 'Formulário de Edição' : 'Formulário de Cadastro'; ?></h2>
