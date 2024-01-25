@@ -5,15 +5,13 @@
 }
 
 body {
-  background-image: url("../img/background.jpg");
+  background-image: url("../img/18705217_v1016-a-08.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0;
-  padding: 0;
   background-color: #f2f2f2;
   flex-direction: column;
 }
@@ -31,6 +29,52 @@ nav {
   width: 100%;
   box-sizing: border-box; /* Garante que padding não aumente a largura */
   text-align: left;
+}
+
+/* Estilo para o Formulário de Login e Cadastro */
+
+.card {
+  background-color: #ffffff;
+  color: #155f9b;
+  font-family: "Oswald", sans-serif;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  padding: 20px;
+  text-align: center;
+}
+
+.card-header {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.card-content-area {
+  margin-bottom: 15px;
+  position: relative;
+  padding-left: 35px;
+}
+
+.card-content-area i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #155f9b;
+}
+
+.card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.recuperar_senha {
+  text-decoration: none;
+  color: #155f9b;
+  margin-top: 10px;
 }
 
 header {
@@ -62,17 +106,10 @@ header h1 {
   color: #155f9b;
 }
 
-form {
-  flex-direction: column;
-  align-items: center;
-}
 
-.form-group {
-  margin: 10px 0;
-}
-
-input[type="text"],
-input[type="password"] {
+input[ type="text"],
+input[type="password"],
+input [type="email"] {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -91,7 +128,7 @@ input[type="password"] {
   margin-right: 10px;
 }
 
-button {
+.submit {
   background-color: #0056b3;
   color: #fff;
   padding: 10px 20px;
@@ -115,8 +152,8 @@ form {
   padding: 20px;
   margin-top: 20px;
   box-sizing: border-box;
-  overflow-y: auto; /* Adicionado para permitir a rolagem vertical quando necessário */
-  max-height: 80vh; /* Ajuste conforme necessário para controlar a altura máxima */
+  overflow-y: auto; 
+  max-height: 80vh; 
 }
 
 h2 {
@@ -131,7 +168,6 @@ label {
   color: #0070bb;
 }
 
-form input[type="text"],
 form textarea,
 input[type="date"],
 select,
@@ -256,27 +292,4 @@ a {
 
 .registro-table tr:nth-child(even) {
   background-color: #f2f2f2;
-}
-
-/* Media Query para telas menores */
-@media screen and (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .right-menu {
-    margin-top: 10px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .right-menu button,
-  .right-menu a {
-    margin-top: 10px;
-  }
-
-  form {
-    margin: 20px 10px;
-  }
 }

@@ -10,9 +10,9 @@ class Crud
         $this->conn = $conn;
     }
 
-    public function cadastrar($nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $gestor, $motivo_informacao, $qtd_periodos_ferias)
+    public function cadastrar($nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $gestor, $motivo_informacao, $qtd_periodos_ferias, $data_inicio, $data_fim)
     {
-        $sql = "INSERT INTO controle (nome, matricula_servidor, unidade_lotacao, categoria_funcional, gestor, motivo_informacao, qtd_periodos_ferias) VALUES (:nome, :matricula_servidor, :unidade_lotacao, :categoria_funcional, :gestor, :motivo_informacao, :qtd_periodos_ferias)";
+        $sql = "INSERT INTO controle (nome, matricula_servidor, unidade_lotacao, categoria_funcional, gestor, motivo_informacao, qtd_periodos_ferias, data_inicio, data_fim) VALUES (:nome, :matricula_servidor, :unidade_lotacao, :categoria_funcional, :gestor, :motivo_informacao, :qtd_periodos_ferias, :data_inicio, :data_fim)";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -27,6 +27,8 @@ class Crud
         $stmt->bindParam(":gestor", $gestor);
         $stmt->bindParam(":motivo_informacao", $motivo_informacao);
         $stmt->bindParam(":qtd_periodos_ferias", $qtd_periodos_ferias, PDO::PARAM_INT);
+        $stmt->bindParam(":data_inicio", $data_inicio);
+        $stmt->bindParam(":data_fim", $data_fim);
 
         if ($stmt->execute()) {
             header("Location:listar.php");
@@ -37,7 +39,6 @@ class Crud
 
         $stmt->closeCursor();
     }
-
 
     public function listar()
     {
@@ -59,6 +60,8 @@ class Crud
             echo "<th>Gestor</th>";
             echo "<th>Motivo da Informação</th>";
             echo "<th>Quantidade de Períodos de férias</th>";
+            echo "<th>Data de Início</th>";
+            echo "<th>Data de Fim</th>";
             echo "<th>Ações</th>";
             echo "</tr>";
             echo "</thead>";
@@ -73,22 +76,14 @@ class Crud
                 echo "<td>" . $row['gestor'] . "</td>";
                 echo "<td>" . $row['motivo_informacao'] . "</td>";
                 echo "<td>" . $row['qtd_periodos_ferias'] . "</td>";
+                echo "<td>" . $row['data_inicio'] . "</td>";
+                echo "<td>" . $row['data_fim'] . "</td>";
                 echo "<td>
-                        <a href='editar_cadastrar.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i> </a>
-                        <a href='#' onclick='confirmarExclusao(" . $row['id'] . ")'><i class='fas fa-trash-alt'></i> </a>
+                        <a href='cadastrar.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i> </a>
+                        <a href='./deletar.php?id=" . $row['id'] . "'><i class='fas fa-trash-alt'></i> </a>
                         </td>";
                 echo "</tr>";
             }
-
-            echo "<script>
-                function confirmarExclusao(id) {
-                    var confirmacao = confirm('Tem certeza que deseja excluir este registro?');
-    
-                    if (confirmacao) {
-                        window.location.href = './listar.php?id=' + id;
-                    }
-                }
-            </script>";
 
             echo "</tbody>";
             echo "</table>";
@@ -97,43 +92,52 @@ class Crud
         }
     }
 
+
     public function editar($id)
     {
-        $sql = "SELECT * FROM controle WHERE id = :id";
+        $sql = "SELECT * FROM controle";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        // Obtém os resultados como um array associativo
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function atualizar($id, $nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $gestor, $motivo_informacao, $qtd_periodos_ferias)
     {
-        $sql = "UPDATE controle SET nome=?, matricula_servidor=?, unidade_lotacao=?, categoria_funcional=?, gestor=?, motivo_informacao=?, qtd_periodos_ferias=? WHERE id=?";
+        $sql = "UPDATE controle SET nome=:nome, matricula_servidor=:matricula_servidor, unidade_lotacao=:unidade_lotacao, categoria_funcional=:categoria_funcional, gestor=:gestor, motivo_informacao=:motivo_informacao, qtd_periodos_ferias=:qtd_periodos_ferias WHERE id=:id";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssssssii", $nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $gestor, $motivo_informacao, $qtd_periodos_ferias, $id);
+
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->bindParam(":nome", $nome);
+        $stmt->bindParam(":matricula_servidor", $matricula_servidor);
+        $stmt->bindParam(":unidade_lotacao", $unidade_lotacao);
+        $stmt->bindParam(":categoria_funcional", $categoria_funcional);
+        $stmt->bindParam(":gestor", $gestor);
+        $stmt->bindParam(":motivo_informacao", $motivo_informacao);
+        $stmt->bindParam(":qtd_periodos_ferias", $qtd_periodos_ferias);
 
         if ($stmt->execute()) {
             echo "Registro atualizado com sucesso.";
         } else {
             echo "Erro: " . $sql . "<br>" . $this->conn->error;
         }
-
-        $stmt->close();
     }
 
     public function excluir($id)
     {
         $sql = "DELETE FROM controle WHERE id = :id";
-        
+
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    
+
         if ($stmt->execute()) {
-            echo "Registro excluído com sucesso.";
+            // Remova esta linha
+            // echo "Registro excluído com sucesso.";
         } else {
-            echo "Erro ao excluir o registro: " . $stmt->errorInfo()[2];
+            // Você pode adicionar um log aqui se desejar
+            // echo "Erro ao excluir o registro: " . $stmt->errorInfo()[2];
         }
     }
 }

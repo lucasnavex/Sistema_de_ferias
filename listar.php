@@ -5,25 +5,27 @@ $crud = new Crud($conn);
 ?>
 
 
-    <nav>
-        REGISTROS
-    </nav>
+<nav>
+    REGISTROS
+</nav>
 
-    <div class="container">
-        <div class="header">
-            <div class="left-menu">
-                Olá, Administrador
-            </div>
-            <div class="right-menu">
-                <button>Cadastro</button>
-                <button><a href="editar_cadastrar.php" class="nav-link">Novo Registro</a></button>
-            </div>
+<div class="container">
+    <div class="header">
+        <div class="left-menu">
+            Olá, Administrador
         </div>
-
-        <div class="content">
-            <?php
-            // Seu código PHP para exibir a tabela
-            $crud->listar();
-            ?>
+        <div class="right-menu">
+            <button><a href="cadastro.php" class="nav-link">Cadastro</a></button>
+            <button><a href="cadastrar.php" class="nav-link">Novo Registro</a></button>
         </div>
     </div>
+
+    <div class="content">
+        <?php
+        // Seu código PHP para exibir a tabela
+        $crud->listar();
+        ?>
+    </div>
+</div>
+
+
