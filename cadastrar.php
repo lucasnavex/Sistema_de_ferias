@@ -11,9 +11,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $matricula_servidor = $_POST['matricula_servidor'];
     $unidade_lotacao = $_POST['unidade_lotacao'];
     $categoria_funcional = $_POST['categoria_funcional'];
+    $central = $_POST['central'];
     $gestor = $_POST['gestor'];
     $motivo_informacao = $_POST['motivo_informacao'];
     $qtd_periodos_ferias = $_POST['qtd_periodos_ferias'];
+    
+    // Inicializa arrays para armazenar as datas de início e fim
+    $datas_inicio = [];
+    $datas_fim = [];
+
+    // Preenche os arrays com as datas se existirem
+    for ($i = 0; $i < $qtd_periodos_ferias; $i++) {
+        $datas_inicio[] = isset($_POST['inicio_periodo'][$i]) ? $_POST['inicio_periodo'][$i] : null;
+        $datas_fim[] = isset($_POST['fim_periodo'][$i]) ? $_POST['fim_periodo'][$i] : null;
+    }
 
     // Se for uma operação de edição, atualize os dados
     if ($id) {
@@ -22,11 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $matricula_servidor,
             $unidade_lotacao,
             $categoria_funcional,
+            $central,
             $gestor,
             $motivo_informacao,
             $qtd_periodos_ferias,
-            $data_inicio, 
-            $data_fim
+            $datas_inicio,
+            $datas_fim
         );
 
         // Redirecionar para listar.php após a atualização
@@ -39,11 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $matricula_servidor,
             $unidade_lotacao,
             $categoria_funcional,
+            $central,
             $gestor,
             $motivo_informacao,
             $qtd_periodos_ferias,
-            $data_inicio,  
-            $data_fim
+            $datas_inicio,
+            $datas_fim
         );
     }
 }
@@ -62,6 +75,7 @@ $registro = $id ? $crud->editar($id) : null;
     Matrícula do Servidor: <input type="text" input-cadastro name="matricula_servidor" value="<?php echo $registro['matricula_servidor'] ?? ''; ?>" required><br>
     Unidade de Lotação: <input type="text" input-cadastro name="unidade_lotacao" value="<?php echo $registro['unidade_lotacao'] ?? ''; ?>" required><br>
     Categoria Funcional: <input type="text" input-cadastro name="categoria_funcional" value="<?php echo $registro['categoria_funcional'] ?? ''; ?>" required><br>
+    Central: <input type="text" name="central" value="<?php echo $registro['central'] ?? ''; ?>" required><br>
     Gestor: <input type="text" name="gestor" value="<?php echo $registro['gestor'] ?? ''; ?>" required><br>
     Motivo da Informação: <textarea name="motivo_informacao" required><?php echo $registro['motivo_informacao'] ?? ''; ?></textarea><br>
 
@@ -81,19 +95,16 @@ $registro = $id ? $crud->editar($id) : null;
         <br>
         <div id="container_datas">
             <?php
-            // Se houver datas no registro, exibir os campos de data preenchidos
-            if (isset($registro['datas']) && is_array($registro['datas'])) {
-                foreach ($registro['datas'] as $i => $data) {
-                    echo '<label>Início do Período ' . ($i + 1) . ': </label>';
-                    echo '<input type="date" name="inicio_periodo[]" value="' . $data['inicio'] . '"><br>';
-                    echo '<label>Fim do Período ' . ($i + 1) . ': </label>';
-                    echo '<input type="date" name="fim_periodo[]" value="' . $data['fim'] . '"><br>';
-                }
+            // Exibe os campos de data preenchidos
+            for ($i = 0; $i < $registro['qtd_periodos_ferias']; $i++) {
+                echo '<label>Início do Período ' . ($i + 1) . ': </label>';
+                echo '<input type="date" name="inicio_periodo[]" value="' . ($data['datas_inicio'] ?? '') . '"><br>';
+                echo '<label>Fim do Período ' . ($i + 1) . ': </label>';
+                echo '<input type="date" name="fim_periodo[]" value="' . ($data['datas_fim'] ?? '') . '"><br>';
             }
             ?>
         </div>
     <?php endif; ?>
-
 
     <input type="submit" value="<?php echo $id ? 'Atualizar' : 'Cadastrar'; ?>">
 </form>
@@ -132,4 +143,3 @@ $registro = $id ? $crud->editar($id) : null;
 </body>
 
 </html>
-
