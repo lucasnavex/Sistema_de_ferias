@@ -48,10 +48,13 @@ if ($type === "register") {
     $password = filter_input(INPUT_POST, "password");
 
     if ($userDao->authenticateUser($email, $password)) {
-        $message->setMessage("Seja bem-vindo!", "success", "listar.php");
+        // Obtém o nome do usuário da sessão
+        $userName = isset($_SESSION['usuario_nome']) ? $_SESSION['usuario_nome'] : "Usuário";
+    
+        // Exibe mensagem ou realiza outras ações com o nome do usuário
+        echo "Seja bem-vindo, $userName!";
     } else {
-        $message->setMessage("Usuário ou senha incorretos", "error", "back");
+        // Exibe mensagem de erro
+        echo "Usuário ou senha incorretos";
     }
-} else {
-    $message->setMessage("Informações inválidas!", "error", "index.php");
 }

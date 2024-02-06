@@ -42,7 +42,6 @@ nav {
   width: 300px;
   padding: 20px;
   text-align: center;
-  margin-top: 50px;
 }
 
 .card-header {
@@ -107,7 +106,8 @@ header h1 {
   color: #155f9b;
 }
 
-input[type="text"],
+
+input[ type="text"],
 input[type="password"],
 input [type="email"] {
   width: 100%;
@@ -152,8 +152,8 @@ form {
   padding: 20px;
   margin-top: 20px;
   box-sizing: border-box;
-  overflow-y: auto;
-  max-height: 80vh;
+  overflow-y: auto; 
+  max-height: 80vh; 
 }
 
 h2 {

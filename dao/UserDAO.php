@@ -74,7 +74,7 @@
       $stmt->execute();
         
       // Redireciona e apresenta mensagem de sucesso
-      $this->message->setMessage("Dados atualizados com sucesso!", "success", "editprofile.php");
+      $this->message->setMessage("Dados atualizados com sucesso!", "success", "listar.php");
       
     }
 
@@ -91,7 +91,7 @@
       $stmt->execute();
         
       // Redireciona e apresenta mensagem de sucesso
-      $this->message->setMessage("Senha atualizada!", "success", "editprofile.php");
+      $this->message->setMessage("Senha atualizada!", "success", "listar.php");
       
     }
 
@@ -183,36 +183,31 @@
     }
 
     public function authenticateUser($email, $password) {
-
-      $user = new User();
-
       $user = $this->findByEmail($email);
-
+  
       // Checa se o usuário existe
-      if($user) {
-
-        // Checa se a senha bate
-        if(password_verify($password, $user->password)) {
-
-          // Gera o token e coloca na session, sem redirecionar
-          $token = $user->generateToken();
-
-          $this->setTokenToSession($token, false);
-
-          // Atualiza token do usuário
-          $user->token = $token;
-
-          $this->update($user);
-
-          return true;
-
-        }
-
+      if ($user) {
+          // Checa se a senha bate
+          if (password_verify($password, $user->password)) {
+              // Gera o token e coloca na session, sem redirecionar
+              $token = $user->generateToken();
+              $this->setTokenToSession($token, false);
+  
+              // Atualiza token do usuário
+              $user->token = $token;
+             
+  
+              // Armazena o nome do usuário na sessão
+              $_SESSION['usuario_nome'] = $user->name;
+  
+              $this->update($user);
+  
+              return true;
+          }
       }
-
+  
       return false;
-      
-    }
+  }
 
     public function destroyToken() {
 
