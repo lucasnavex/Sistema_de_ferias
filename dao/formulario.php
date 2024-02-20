@@ -10,9 +10,9 @@ class Crud
         $this->conn = $conn;
     }
 
-    public function cadastrar($nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $gestor, $motivo_informacao, $qtd_periodos_ferias, $data_inicio, $data_fim)
+    public function cadastrar($nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $central, $gestor, $motivo_informacao, $qtd_periodos_ferias)
     {
-        $sql = "INSERT INTO controle (nome, matricula_servidor, unidade_lotacao, categoria_funcional, gestor, motivo_informacao, qtd_periodos_ferias, data_inicio, data_fim) VALUES (:nome, :matricula_servidor, :unidade_lotacao, :categoria_funcional, :gestor, :motivo_informacao, :qtd_periodos_ferias, :data_inicio, :data_fim)";
+        $sql = "INSERT INTO controle (nome, matricula_servidor, unidade_lotacao, categoria_funcional, central, gestor, motivo_informacao, qtd_periodos_ferias) VALUES (:nome, :matricula_servidor, :unidade_lotacao, :categoria_funcional, :central, :gestor, :motivo_informacao, :qtd_periodos_ferias)";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -24,11 +24,10 @@ class Crud
         $stmt->bindParam(":matricula_servidor", $matricula_servidor);
         $stmt->bindParam(":unidade_lotacao", $unidade_lotacao);
         $stmt->bindParam(":categoria_funcional", $categoria_funcional);
+        $stmt->bindParam(":central", $central);
         $stmt->bindParam(":gestor", $gestor);
         $stmt->bindParam(":motivo_informacao", $motivo_informacao);
         $stmt->bindParam(":qtd_periodos_ferias", $qtd_periodos_ferias, PDO::PARAM_INT);
-        $stmt->bindParam(":data_inicio", $data_inicio);
-        $stmt->bindParam(":data_fim", $data_fim);
 
         if ($stmt->execute()) {
             header("Location:listar.php");
@@ -39,6 +38,7 @@ class Crud
 
         $stmt->closeCursor();
     }
+
 
     public function listar()
     {
@@ -57,11 +57,10 @@ class Crud
             echo "<th>Matrícula do servidor</th>";
             echo "<th>Unidade de lotação do servidor</th>";
             echo "<th>Categoria Funcional</th>";
+            echo "<th>Central</th>";
             echo "<th>Gestor</th>";
             echo "<th>Motivo da Informação</th>";
             echo "<th>Quantidade de Períodos de férias</th>";
-            echo "<th>Data de Início</th>";
-            echo "<th>Data de Fim</th>";
             echo "<th>Ações</th>";
             echo "</tr>";
             echo "</thead>";
@@ -73,11 +72,10 @@ class Crud
                 echo "<td>" . $row['matricula_servidor'] . "</td>";
                 echo "<td>" . $row['unidade_lotacao'] . "</td>";
                 echo "<td>" . $row['categoria_funcional'] . "</td>";
+                echo "<td>" . $row['central'] . "</td>";
                 echo "<td>" . $row['gestor'] . "</td>";
                 echo "<td>" . $row['motivo_informacao'] . "</td>";
                 echo "<td>" . $row['qtd_periodos_ferias'] . "</td>";
-                echo "<td>" . $row['data_inicio'] . "</td>";
-                echo "<td>" . $row['data_fim'] . "</td>";
                 echo "<td>
                         <a href='cadastrar.php?id=" . $row['id'] . "'><i class='fas fa-edit'></i> </a>
                         <a href='./deletar.php?id=" . $row['id'] . "'><i class='fas fa-trash-alt'></i> </a>
@@ -95,17 +93,22 @@ class Crud
 
     public function editar($id)
     {
-        $sql = "SELECT * FROM controle";
+        $sql = "SELECT * FROM controle WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
         // Obtém os resultados como um array associativo
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result;
     }
 
-    public function atualizar($id, $nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $gestor, $motivo_informacao, $qtd_periodos_ferias)
+
+
+    public function atualizar($id, $nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $central, $gestor, $motivo_informacao, $qtd_periodos_ferias)
     {
-        $sql = "UPDATE controle SET nome=:nome, matricula_servidor=:matricula_servidor, unidade_lotacao=:unidade_lotacao, categoria_funcional=:categoria_funcional, gestor=:gestor, motivo_informacao=:motivo_informacao, qtd_periodos_ferias=:qtd_periodos_ferias WHERE id=:id";
+        $sql = "UPDATE controle SET nome=:nome, matricula_servidor=:matricula_servidor, unidade_lotacao=:unidade_lotacao, categoria_funcional=:categoria_funcional, central=:central, gestor=:gestor, motivo_informacao=:motivo_informacao, qtd_periodos_ferias=:qtd_periodos_ferias WHERE id=:id";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -114,12 +117,15 @@ class Crud
         $stmt->bindParam(":matricula_servidor", $matricula_servidor);
         $stmt->bindParam(":unidade_lotacao", $unidade_lotacao);
         $stmt->bindParam(":categoria_funcional", $categoria_funcional);
+        $stmt->bindParam(":central", $central);
         $stmt->bindParam(":gestor", $gestor);
         $stmt->bindParam(":motivo_informacao", $motivo_informacao);
         $stmt->bindParam(":qtd_periodos_ferias", $qtd_periodos_ferias);
 
         if ($stmt->execute()) {
-            echo "Registro atualizado com sucesso.";
+            // Redireciona para a página de listar após a atualização
+            header("Location:listar.php");
+            exit();
         } else {
             echo "Erro: " . $sql . "<br>" . $this->conn->error;
         }
@@ -133,11 +139,9 @@ class Crud
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
-            // Remova esta linha
-            // echo "Registro excluído com sucesso.";
+            echo "Registro excluído com sucesso.";
         } else {
-            // Você pode adicionar um log aqui se desejar
-            // echo "Erro ao excluir o registro: " . $stmt->errorInfo()[2];
+            echo "Erro ao excluir o registro: " . $stmt->errorInfo()[2];
         }
     }
 }

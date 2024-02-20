@@ -25,7 +25,7 @@ $userDAO = new UserDAO($conn, $BASE_URL);
 <body>
     <nav>
         <img src="./img/inss-logo.0e1a042d.png" alt="Logo" class="logo">
-        Registro
+        Registros
     </nav>
 
     </div>
