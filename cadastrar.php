@@ -1,4 +1,3 @@
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <nav>
         <img src="./img/inss-logo.0e1a042d.png" alt="Logo" class="logo">
@@ -31,6 +31,19 @@
         $motivo_informacao = $_POST['motivo_informacao'];
         $qtd_periodos_ferias = $_POST['qtd_periodos_ferias'];
 
+        //array vazio para representar as datas
+        $datas = [];
+
+        // Se for uma operação de edição, obtenha as datas selecionadas
+        if ($id) {
+            for ($i = 0; $i < $qtd_periodos_ferias; $i++) {
+                $data_inicio = $_POST['inicio_periodo'][$i];
+                $data_fim = $_POST['fim_periodo'][$i];
+                $datas["data_inicio_$i"] = $data_inicio;
+                $datas["data_fim_$i"] = $data_fim;
+            }
+        }
+
         // Se for uma operação de edição, atualize os dados
         if ($id) {
             $crud->atualizar(
@@ -42,7 +55,8 @@
                 $central,
                 $gestor,
                 $motivo_informacao,
-                $qtd_periodos_ferias
+                $qtd_periodos_ferias,
+                $datas
             );
 
             // Redirecionar para listar.php após a atualização
@@ -58,7 +72,8 @@
                 $central,
                 $gestor,
                 $motivo_informacao,
-                $qtd_periodos_ferias
+                $qtd_periodos_ferias,
+                $datas
             );
         }
     }
@@ -77,9 +92,9 @@
         Matrícula do Servidor: <input type="text" input-cadastro name="matricula_servidor" value="<?php echo $registro['matricula_servidor'] ?? ''; ?>" required><br>
         Unidade de Lotação: <input type="text" input-cadastro name="unidade_lotacao" value="<?php echo $registro['unidade_lotacao'] ?? ''; ?>" required><br>
         Categoria Funcional: <input type="text" input-cadastro name="categoria_funcional" value="<?php echo $registro['categoria_funcional'] ?? ''; ?>" required><br>
-        Central: <input type="text" name="central" value="<?php echo $registro['central'] ?? ''; ?>" ><br>
-        Gestor: <input type="radio" name="gestor" value="1" <?php if(isset($registro['gestor']) && $registro['gestor'] == '1') echo 'checked'; ?> required>Sim
-        <input type="radio" name="gestor" value="0" <?php if(isset($registro['gestor']) && $registro['gestor'] == '0') echo 'checked'; ?> required>Não<br>
+        Central: <input type="text" name="central" value="<?php echo $registro['central'] ?? ''; ?>"><br>
+        Gestor: <input type="radio" name="gestor" value="1" <?php if (isset($registro['gestor']) && $registro['gestor'] == '1') echo 'checked'; ?> required>Sim
+        <input type="radio" name="gestor" value="0" <?php if (isset($registro['gestor']) && $registro['gestor'] == '0') echo 'checked'; ?> required>Não<br>
         Motivo da Informação: <textarea name="motivo_informacao" required><?php echo $registro['motivo_informacao'] ?? ''; ?></textarea><br>
 
         <?php if (!$id) : ?>
@@ -93,9 +108,20 @@
             <br>
             <div id="container_datas"></div>
         <?php else : ?>
-            Quantidade de Períodos de Férias:
-            <input type="number" name="qtd_periodos_ferias" value="<?php echo isset($registro['qtd_periodos_ferias']) ? $registro['qtd_periodos_ferias'] : ''; ?>" min="1" max="3" required>
-            <br>
+            <?php
+            $datasFerias = $crud->listarDatasFerias($id);
+
+            // Verifique se $datasFerias é um array
+            if (is_array($datasFerias) && count($datasFerias) > 0) {
+                foreach ($datasFerias as $index => $data) {
+                    echo "Período " . ($index + 1) . ": " . $data['data_inicio'] . " a " . $data['data_fim'] . "<br>";
+                }
+            } else {
+                // Se $datasFerias não for um array ou estiver vazio, exiba mensagens de depuração
+                echo "Erro ao obter períodos de férias.<br>";
+                echo "Retorno da função listarDatasFerias: " . var_export($datasFerias, true) . "<br>";
+            }
+            ?>
         <?php endif; ?>
 
         <input type="submit" value="<?php echo $id ? 'Atualizar' : 'Cadastrar'; ?>">

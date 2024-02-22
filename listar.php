@@ -54,8 +54,8 @@ $userDAO = new UserDAO($conn, $BASE_URL);
                 }
                 ?>
             </div>
-            <div class="right-menu">
-                <button><a href="cadastro.php" class="nav-link">Cadastro</a></button>
+            <div class="right-menu">                
+                <button><a href=" cadastro.php" class="nav-link">Cadastro</a></button>
                 <button><a href="cadastrar.php" class="nav-link">Novo Registro</a></button>
             </div>
         </div>
