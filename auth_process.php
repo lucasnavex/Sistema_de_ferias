@@ -15,6 +15,7 @@ if ($type === "register") {
     $email = filter_input(INPUT_POST, "email");
     $password = filter_input(INPUT_POST, "password");
     $confirmpassword = filter_input(INPUT_POST, "confirmpassword");
+    $gestor = filter_input(INPUT_POST, "gestor");
 
     if ($name && $lastname && $email && $password) {
         if ($password === $confirmpassword) {
@@ -30,6 +31,8 @@ if ($type === "register") {
                 $user->email = $email;
                 $user->password = $finalPassword;
                 $user->token = $userToken;
+                $user->gestor = $gestor;
+                
 
                 $auth = true;
                 $userDao->create($user, $auth);

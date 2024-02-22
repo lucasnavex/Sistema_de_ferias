@@ -33,16 +33,18 @@
     public function create(User $user, $authUser = false) {
 
       $stmt = $this->conn->prepare("INSERT INTO users (
-        name, lastname, email, password, token
+        name, lastname, email, password, token, gestor
       ) VALUES (
-        :name, :lastname, :email, :password, :token
+        :name, :lastname, :email, :password, :token , :gestor
       )");
-
+    
       $stmt->bindParam(":name", $user->name);
       $stmt->bindParam(":lastname", $user->lastname);
       $stmt->bindParam(":email", $user->email);
       $stmt->bindParam(":password", $user->password);
       $stmt->bindParam(":token", $user->token);
+      $stmt->bindParam(":gestor", $user->gestor, PDO::PARAM_BOOL);
+      
 
       $stmt->execute();
 

@@ -29,7 +29,9 @@ require_once("templates/header.php");
             <div class="card-content-area">
                 <i class="fas fa-lock"></i>
                 <input type="password" name="confirmpassword" id="confirmpassword" placeholder="Confirme a Senha" autocomplete="off" required>
-            </div>
+            </div> 
+            Gestor: <input type="radio" name="gestor"  id="gestor" value="1" required>Sim
+            <input type="radio" name="gestor"  id="gestor" value="0" required>Não
         </div>
         <div class="card-footer">
             <input type="submit" value="Cadastrar" class="submit">

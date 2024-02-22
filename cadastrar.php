@@ -27,7 +27,7 @@
         $unidade_lotacao = $_POST['unidade_lotacao'];
         $categoria_funcional = $_POST['categoria_funcional'];
         $central = $_POST['central'];
-        $gestor = $_POST['gestor'];
+        $gestor = $_POST['gestor'] == '1' ? true : false;
         $motivo_informacao = $_POST['motivo_informacao'];
         $qtd_periodos_ferias = $_POST['qtd_periodos_ferias'];
 
@@ -77,8 +77,9 @@
         Matrícula do Servidor: <input type="text" input-cadastro name="matricula_servidor" value="<?php echo $registro['matricula_servidor'] ?? ''; ?>" required><br>
         Unidade de Lotação: <input type="text" input-cadastro name="unidade_lotacao" value="<?php echo $registro['unidade_lotacao'] ?? ''; ?>" required><br>
         Categoria Funcional: <input type="text" input-cadastro name="categoria_funcional" value="<?php echo $registro['categoria_funcional'] ?? ''; ?>" required><br>
-        Central: <input type="text" name="central" value="<?php echo $registro['central'] ?? ''; ?>" required><br>
-        Gestor: <input type="text" name="gestor" value="<?php echo $registro['gestor'] ?? ''; ?>" required><br>
+        Central: <input type="text" name="central" value="<?php echo $registro['central'] ?? ''; ?>" ><br>
+        Gestor: <input type="radio" name="gestor" value="1" <?php if(isset($registro['gestor']) && $registro['gestor'] == '1') echo 'checked'; ?> required>Sim
+        <input type="radio" name="gestor" value="0" <?php if(isset($registro['gestor']) && $registro['gestor'] == '0') echo 'checked'; ?> required>Não<br>
         Motivo da Informação: <textarea name="motivo_informacao" required><?php echo $registro['motivo_informacao'] ?? ''; ?></textarea><br>
 
         <?php if (!$id) : ?>

@@ -73,7 +73,7 @@ class Crud
                 echo "<td>" . $row['unidade_lotacao'] . "</td>";
                 echo "<td>" . $row['categoria_funcional'] . "</td>";
                 echo "<td>" . $row['central'] . "</td>";
-                echo "<td>" . $row['gestor'] . "</td>";
+                echo "<td>" . ($row['gestor'] == 1 ? 'Sim' : 'Não') . "</td>";
                 echo "<td>" . $row['motivo_informacao'] . "</td>";
                 echo "<td>" . $row['qtd_periodos_ferias'] . "</td>";
                 echo "<td>
