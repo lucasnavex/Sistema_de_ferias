@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $motivo_informacao = $_POST['motivo_informacao'];
     $qtd_periodos_ferias = $_POST['qtd_periodos_ferias'];
 
+
     //array vazio para representar as datas
     $datas = [];
 
@@ -88,6 +89,19 @@ $registro = $id ? $crud->editar($id) : null;
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+
+    <script>
+        function validarMatricula(input) {
+            // Substituir não números por uma string vazia
+            input.value = input.value.replace(/\D/g, '');
+
+            // Limitar o comprimento para 7 caracteres
+            if (input.value.length > 7) {
+                input.value = input.value.slice(0, 7);
+            }
+        }
+    </script>
+
 </head>
 
 <body>
@@ -103,7 +117,8 @@ $registro = $id ? $crud->editar($id) : null;
         <?php endif; ?>
 
         Nome: <input type="text" class="input-cadastro" name="nome" value="<?php echo $registro['nome'] ?? ''; ?>" required><br>
-        Matrícula do Servidor: <input type="text" input-cadastro name="matricula_servidor" value="<?php echo $registro['matricula_servidor'] ?? ''; ?>" required><br>
+        Matrícula do Servidor:
+        <input type="text" name="matricula_servidor" oninput="validarMatricula(this)" pattern="[0-9]{7}" title="Digite exatamente 7 números" required><br>
         Unidade de Lotação: <input type="text" input-cadastro name="unidade_lotacao" value="<?php echo $registro['unidade_lotacao'] ?? ''; ?>" required><br>
         Categoria Funcional: <input type="text" input-cadastro name="categoria_funcional" value="<?php echo $registro['categoria_funcional'] ?? ''; ?>" required><br>
         Central: <input type="text" name="central" value="<?php echo $registro['central'] ?? ''; ?>"><br>
