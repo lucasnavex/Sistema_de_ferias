@@ -1,18 +1,18 @@
 <?php
+require_once("dao/UserDAO.php");
+require_once("globals.php");
+require_once("db.php");
 include './dao/formulario.php';
-$crud = new Crud($conn);
 
+$crud = new Crud($conn);
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 
-// Obter o registro para exibir
+// Obter o registro para exibir no formulário se for uma operação de visualização
 $registro = $id ? $crud->editar($id) : null;
-
-// Obter as datas de férias
-$datasFerias = $crud->listarDatasFerias($id);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -22,32 +22,76 @@ $datasFerias = $crud->listarDatasFerias($id);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
     <nav>
         <img src="./img/inss-logo.0e1a042d.png" alt="Logo" class="logo">
-        REGISTRO DE FÉRIAS
+        Registros
     </nav>
 
-    <div class="container">
-        <div class="detalhes-registro">
-            <h2>Detalhes do Registro</h2>
-            <p>Nome: <?php echo $registro['nome'] ?? ''; ?></p>
-            <p>Matrícula do Servidor: <?php echo $registro['matricula_servidor'] ?? ''; ?></p>
-
-            <h2>Períodos de Férias</h2>
-            <?php if (is_array($datasFerias) && !empty($datasFerias)) : ?>
-                <?php foreach ($datasFerias as $index => $data) : ?>
-                    <p>Período <?php echo $index + 1; ?>: <?php echo $data['data_inicio']; ?> a <?php echo $data['data_fim']; ?></p>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <p>Não há períodos de férias registrados.</p>
-            <?php endif; ?>
-            <a href="listar.php" class="button-voltar"><i class="fas fa-arrow-left"></i> Voltar para Listagem</a>
-
+    <?php if (!empty($flassMessage["msg"])) : ?>
+        <div class="msg-container">
+            <p class="msg <?= $flassMessage["type"] ?>"><?= $flassMessage["msg"] ?></p>
         </div>
-    </div>
-</body>
+    <?php endif; ?>
 
-</html>
+    <div class="container">
+        <div class="header">
+            <div class="left-menu">
+                <?php
+                if (isset($_SESSION['token'])) {
+                    // Pega o usuário autenticado
+                    $user = $userDAO->findByToken($_SESSION['token']);
+
+                    if ($user) {
+                        // Exibe o nome do usuário
+                        echo "Olá, " . $_SESSION['usuario_nome'];
+                    } else {
+                        echo "Olá, Usuário";
+                    }
+                } else {
+                    echo "Olá, Convidado";
+                }
+                ?>
+            </div>
+            <div class="right-menu">
+                <button><a href="cadastrar.php" class="nav-link">Novo Registro</a></button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="visualizar-container">
+
+                <?php if ($registro) : ?>
+                    <?php
+                    $datasFerias = $crud->listarDatasFerias($id);
+
+                    // Verifique se $datasFerias é um array
+                    if (is_array($datasFerias) && count($datasFerias) > 0) {
+                        echo "<table class='registro-table'>";
+                        echo "<tr><th>Período</th><th>Data Início</th><th>Data Fim</th></tr>";
+
+                        for ($i = 1; $i <= 3; $i++) {
+                            echo "<tr>";
+                            echo "<td>Período $i</td>";
+                            echo "<td>{$datasFerias['data_inicio_' .$i]}</td>";
+                            echo "<td>{$datasFerias['data_fim_' .$i]}</td>";
+                            echo "</tr>";
+                        }
+
+                        echo "</table>";
+                    } else {
+                        // Se $datasFerias não for um array ou estiver vazio, exiba uma mensagem
+                        echo "<p>Nenhum período de férias encontrado.</p>";
+                        echo "<p>Retorno da função listarDatasFerias: " . var_export($datasFerias, true) . "</p>";
+                    }
+                    ?>
+
+                <?php else : ?>
+                    <p>Registro não encontrado.</p>
+                <?php endif; ?>
+                <button ><a href="listar.php" class="button-voltar"><i class="fas fa-arrow-left"></i> Voltar para Listagem</a></button>
+            </div>
+        </div>

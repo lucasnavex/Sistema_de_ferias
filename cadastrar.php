@@ -1,3 +1,89 @@
+<?php
+require_once './dao/formulario.php';
+$crud = new Crud($conn);
+
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+
+// Processar o formulário se enviado
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Se o formulário foi enviado, processar a ação
+    $nome = $_POST['nome'];
+    $matricula_servidor = $_POST['matricula_servidor'];
+    $unidade_lotacao = $_POST['unidade_lotacao'];
+    $categoria_funcional = $_POST['categoria_funcional'];
+    $central = $_POST['central'];
+    $gestor = $_POST['gestor'] == '1' ? true : false;
+    $motivo_informacao = $_POST['motivo_informacao'];
+    $qtd_periodos_ferias = intval(
+        $_POST['qtd_periodos_ferias']
+    );
+
+
+    //array vazio para representar as datas
+    $datas = [];
+
+    // Se for uma operação de edição, obtenha as datas selecionadas
+    if ($id) {
+        for ($i = 0; $i < $qtd_periodos_ferias; $i++) {
+            $data_inicio = $_POST['inicio_periodo'][$i];
+            $data_fim = $_POST['fim_periodo'][$i];
+            $datas[] = [
+                'data_inicio' => $data_inicio,
+                'data_fim' => $data_fim,
+            ];
+        }
+    }
+
+    // Se for uma operação de edição, atualize os dados
+    if ($id) {
+        $crud->cadastrar(
+            $nome,
+            $matricula_servidor,
+            $unidade_lotacao,
+            $categoria_funcional,
+            $central,
+            $gestor,
+            $motivo_informacao,
+            $qtd_periodos_ferias,
+            isset($datas['data_inicio_0']) ? $datas['data_inicio_0'] : null,
+            isset($datas['data_fim_0']) ? $datas['data_fim_0'] : null,
+            isset($datas['data_inicio_1']) ? $datas['data_inicio_1'] : null,
+            isset($datas['data_fim_1']) ? $datas['data_fim_1'] : null,
+            isset($datas['data_inicio_2']) ? $datas['data_inicio_2'] : null,
+            isset($datas['data_fim_2']) ? $datas['data_fim_2'] : null
+        );
+
+        // Redirecionar para listar.php após a atualização
+        header("Location: listar.php");
+        exit();
+    } else {
+        // Se for uma operação de cadastro, chame o método de cadastro
+        $crud->cadastrar(
+            $nome,
+            $matricula_servidor,
+            $unidade_lotacao,
+            $categoria_funcional,
+            $central,
+            $gestor,
+            $motivo_informacao,
+            $qtd_periodos_ferias,
+            $datas['data_inicio_0'],
+            $datas['data_fim_0'],
+            $datas['data_inicio_1'],
+            $datas['data_fim_1'],
+            $datas['data_inicio_2'],
+            $datas['data_fim_2']
+        );
+    }
+}
+
+// Obter o registro para exibir no formulário se for uma operação de edição
+$registro = $id ? $crud->editar($id) : null;
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,74 +100,6 @@
         REGISTRO DE FÉRIAS
     </nav>
 
-    <?php
-    include './dao/formulario.php';
-    $crud = new Crud($conn);
-
-    $id = isset($_GET['id']) ? $_GET['id'] : null;
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Se o formulário foi enviado, processar a ação
-        $nome = $_POST['nome'];
-        $matricula_servidor = $_POST['matricula_servidor'];
-        $unidade_lotacao = $_POST['unidade_lotacao'];
-        $categoria_funcional = $_POST['categoria_funcional'];
-        $central = $_POST['central'];
-        $gestor = $_POST['gestor'] == '1' ? true : false;
-        $motivo_informacao = $_POST['motivo_informacao'];
-        $qtd_periodos_ferias = $_POST['qtd_periodos_ferias'];
-
-        //array vazio para representar as datas
-        $datas = [];
-
-        // Se for uma operação de edição, obtenha as datas selecionadas
-        if ($id) {
-            for ($i = 0; $i < $qtd_periodos_ferias; $i++) {
-                $data_inicio = $_POST['inicio_periodo'][$i];
-                $data_fim = $_POST['fim_periodo'][$i];
-                $datas["data_inicio_$i"] = $data_inicio;
-                $datas["data_fim_$i"] = $data_fim;
-            }
-        }
-
-        // Se for uma operação de edição, atualize os dados
-        if ($id) {
-            $crud->atualizar(
-                $id,
-                $nome,
-                $matricula_servidor,
-                $unidade_lotacao,
-                $categoria_funcional,
-                $central,
-                $gestor,
-                $motivo_informacao,
-                $qtd_periodos_ferias,
-                $datas
-            );
-
-            // Redirecionar para listar.php após a atualização
-            header("Location: listar.php");
-            exit();
-        } else {
-            // Se for uma operação de cadastro, chame o método de cadastro
-            $crud->cadastrar(
-                $nome,
-                $matricula_servidor,
-                $unidade_lotacao,
-                $categoria_funcional,
-                $central,
-                $gestor,
-                $motivo_informacao,
-                $qtd_periodos_ferias,
-                $datas
-            );
-        }
-    }
-
-    // Obter o registro para exibir no formulário se for uma operação de edição
-    $registro = $id ? $crud->editar($id) : null;
-
-    ?>
     <form action="?action=<?php echo $id ? 'atualizar&id=' . $id : 'cadastrar'; ?>" method="post">
         <h2><?php echo $id ? 'Formulário de Edição' : 'Formulário de Cadastro'; ?></h2>
         <?php if ($id) : ?>
@@ -109,20 +127,23 @@
             <div id="container_datas"></div>
         <?php else : ?>
             <?php
-            $datasFerias = $crud->listarDatasFerias($id);
+            $datas = $crud->listarDatasFerias($id);
 
-            // Verifique se $datasFerias é um array
-            if (is_array($datasFerias) && count($datasFerias) > 0) {
-                foreach ($datasFerias as $index => $data) {
-                    echo "Período " . ($index + 1) . ": " . $data['data_inicio'] . " a " . $data['data_fim'] . "<br>";
-                }
+            // Verifica se $datas é null ou vazio
+            if (!empty($datas)) {
+                // Apenas exibe o campo de data para o primeiro período
+                $index = 0;
+                echo "Início do Período " . ($index + 1) . ": ";
+                echo '<input type="date" name="inicio_periodo[]">';
+                echo "Fim do Período " . ($index + 1) . ": ";
+                echo '<input type="date" name="fim_periodo[]">';
             } else {
-                // Se $datasFerias não for um array ou estiver vazio, exiba mensagens de depuração
-                echo "Erro ao obter períodos de férias.<br>";
-                echo "Retorno da função listarDatasFerias: " . var_export($datasFerias, true) . "<br>";
+                echo "Dados de período indisponíveis.<br>";
             }
             ?>
         <?php endif; ?>
+
+
 
         <input type="submit" value="<?php echo $id ? 'Atualizar' : 'Cadastrar'; ?>">
     </form>

@@ -280,14 +280,16 @@ a {
   padding: 20px;
 }
 
-.registro-table {
+.registro-table, .visualizar-container {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
 .registro-table th,
-.registro-table td {
+.registro-table td,
+.visualizar-container th,
+.visualizar-container td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: left;
@@ -302,66 +304,11 @@ a {
   background-color: #f2f2f2;
 }
 
-td a {
-  white-space: nowrap;
-}
-
-
-.container-detalhes {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  text-align: center;
-}
-
-.container-detalhes h2 {
-  color: #155f9b;
-}
-
-.container-detalhes p {
-  color: #666;
-  margin: 10px 0;
-}
 
 /* Estilo para a tabela de datas */
 
-.datas-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
 
-.datas-table th,
-.datas-table td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-.datas-table th {
-  background-color: #155f9b;
-  color: white;
-}
-
-.datas-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-
-.detalhes-registro {
-  background-color: #fff;
-  color: #155f9b;
-  font-family: "Oswald", sans-serif;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  margin-top: 20px;
-}
-
-
-.button-voltar {
+.button-voltar a {
   display: inline-block;
   background-color: #155f9b;
   color: #fff;
@@ -371,6 +318,10 @@ td a {
   margin-top: 20px;
 }
 
-.button-voltar i {
+.button-voltar {
   margin-right: 5px;
+}
+
+.visualizar-container {
+  width: 160vh ;
 }
