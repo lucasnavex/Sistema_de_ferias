@@ -14,29 +14,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $central = $_POST['central'];
     $gestor = $_POST['gestor'] == '1' ? true : false;
     $motivo_informacao = $_POST['motivo_informacao'];
-    $qtd_periodos_ferias = intval(
-        $_POST['qtd_periodos_ferias']
-    );
-
+    $qtd_periodos_ferias = $_POST['qtd_periodos_ferias'];
 
     //array vazio para representar as datas
     $datas = [];
 
-    // Se for uma operação de edição, obtenha as datas selecionadas
-    if ($id) {
-        for ($i = 0; $i < $qtd_periodos_ferias; $i++) {
-            $data_inicio = $_POST['inicio_periodo'][$i];
-            $data_fim = $_POST['fim_periodo'][$i];
-            $datas[] = [
-                'data_inicio' => $data_inicio,
-                'data_fim' => $data_fim,
-            ];
-        }
+    // Loop para obter todas as datas submetidas
+    for ($i = 0; $i < $qtd_periodos_ferias; $i++) {
+        $data_inicio = $_POST['data_inicio_' . ($i + 1)];
+        $data_fim = $_POST['data_fim_' . ($i + 1)];
+        $datas[] = [
+            'data_inicio' => $data_inicio,
+            'data_fim' => $data_fim,
+        ];
     }
 
     // Se for uma operação de edição, atualize os dados
     if ($id) {
-        $crud->cadastrar(
+        $crud->atualizar(
+            $id,
             $nome,
             $matricula_servidor,
             $unidade_lotacao,
@@ -45,12 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $gestor,
             $motivo_informacao,
             $qtd_periodos_ferias,
-            isset($datas['data_inicio_0']) ? $datas['data_inicio_0'] : null,
-            isset($datas['data_fim_0']) ? $datas['data_fim_0'] : null,
-            isset($datas['data_inicio_1']) ? $datas['data_inicio_1'] : null,
-            isset($datas['data_fim_1']) ? $datas['data_fim_1'] : null,
-            isset($datas['data_inicio_2']) ? $datas['data_inicio_2'] : null,
-            isset($datas['data_fim_2']) ? $datas['data_fim_2'] : null
+            $datas[0]['data_inicio'],
+            $datas[0]['data_fim'],
+            $datas[1]['data_inicio'],
+            $datas[1]['data_fim'],
+            $datas[2]['data_inicio'],
+            $datas[2]['data_fim']
         );
 
         // Redirecionar para listar.php após a atualização
@@ -67,12 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $gestor,
             $motivo_informacao,
             $qtd_periodos_ferias,
-            $datas['data_inicio_0'],
-            $datas['data_fim_0'],
-            $datas['data_inicio_1'],
-            $datas['data_fim_1'],
-            $datas['data_inicio_2'],
-            $datas['data_fim_2']
+            $datas[0]['data_inicio'],
+            $datas[0]['data_fim'],
+            $datas[1]['data_inicio'],
+            $datas[1]['data_fim'],
+            $datas[2]['data_inicio'],
+            $datas[2]['data_fim']
         );
     }
 }
@@ -114,71 +110,22 @@ $registro = $id ? $crud->editar($id) : null;
         Gestor: <input type="radio" name="gestor" value="1" <?php if (isset($registro['gestor']) && $registro['gestor'] == '1') echo 'checked'; ?> required>Sim
         <input type="radio" name="gestor" value="0" <?php if (isset($registro['gestor']) && $registro['gestor'] == '0') echo 'checked'; ?> required>Não<br>
         Motivo da Informação: <textarea name="motivo_informacao" required><?php echo $registro['motivo_informacao'] ?? ''; ?></textarea><br>
+        Períodos de férias: <input type="text" input-cadastro name="qtd_periodos_ferias" value="<?php echo $registro['qtd_periodos_ferias'] ?? ''; ?>" required><br>
 
-        <?php if (!$id) : ?>
-            Quantidade de Períodos de Férias:
-            <select name="qtd_periodos_ferias" onchange="mostrarCamposData()">
-                <option value="0">Selecione</option>
-                <option value="1">1 Período</option>
-                <option value="2">2 Períodos</option>
-                <option value="3">3 Períodos</option>
-            </select>
-            <br>
-            <div id="container_datas"></div>
-        <?php else : ?>
-            <?php
-            $datas = $crud->listarDatasFerias($id);
 
-            // Verifica se $datas é null ou vazio
-            if (!empty($datas)) {
-                // Apenas exibe o campo de data para o primeiro período
-                $index = 0;
-                echo "Início do Período " . ($index + 1) . ": ";
-                echo '<input type="date" name="inicio_periodo[]">';
-                echo "Fim do Período " . ($index + 1) . ": ";
-                echo '<input type="date" name="fim_periodo[]">';
-            } else {
-                echo "Dados de período indisponíveis.<br>";
-            }
-            ?>
-        <?php endif; ?>
+        <!-- Campos de data para os períodos -->
+        <?php for ($i = 1; $i <= 3; $i++) : ?>
+            Início do Período <?php echo $i; ?>:
+            <input type="date" name="data_inicio_<?php echo $i; ?>" value="<?php echo !empty($registro['data_inicio_' . $i]) ? date('Y-m-d', strtotime($registro['data_inicio_' . $i])) : ''; ?>">
+
+            Fim do Período <?php echo $i; ?>:
+            <input type="date" name="data_fim_<?php echo $i; ?>" value="<?php echo !empty($registro['data_fim_' . $i]) ? date('Y-m-d', strtotime($registro['data_fim_' . $i])) : ''; ?>"><br>
+        <?php endfor; ?>
 
 
 
         <input type="submit" value="<?php echo $id ? 'Atualizar' : 'Cadastrar'; ?>">
     </form>
-
-    <script>
-        function mostrarCamposData() {
-            var qtdPeriodos = document.querySelector('select[name="qtd_periodos_ferias"]').value;
-            var containerDatas = document.getElementById('container_datas');
-
-            // Limpa o conteúdo existente
-            containerDatas.innerHTML = '';
-
-            // Cria os campos de data correspondentes ao número de períodos escolhidos
-            for (var i = 0; i < qtdPeriodos; i++) {
-                var labelInicio = document.createElement('label');
-                labelInicio.innerHTML = 'Início do Período ' + (i + 1) + ': ';
-                var inputInicio = document.createElement('input');
-                inputInicio.type = 'date';
-                inputInicio.name = 'inicio_periodo[]'; // Use um array para coletar várias datas
-
-                var labelFim = document.createElement('label');
-                labelFim.innerHTML = 'Fim do Período ' + (i + 1) + ': ';
-                var inputFim = document.createElement('input');
-                inputFim.type = 'date';
-                inputFim.name = 'fim_periodo[]'; // Use um array para coletar várias datas
-
-                containerDatas.appendChild(labelInicio);
-                containerDatas.appendChild(inputInicio);
-                containerDatas.appendChild(document.createElement('br'));
-                containerDatas.appendChild(labelFim);
-                containerDatas.appendChild(inputFim);
-                containerDatas.appendChild(document.createElement('br'));
-            }
-        }
-    </script>
 </body>
 
 </html>

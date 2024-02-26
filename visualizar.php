@@ -65,33 +65,31 @@ $registro = $id ? $crud->editar($id) : null;
             <div class="visualizar-container">
 
                 <?php if ($registro) : ?>
-                    <?php
-                    $datasFerias = $crud->listarDatasFerias($id);
+                    <table class='registro-table'>
+                        <tr>
+                            <th>Período</th>
+                            <th>Data Início</th>
+                            <th>Data Fim</th>
+                        </tr>
 
-                    // Verifique se $datasFerias é um array
-                    if (is_array($datasFerias) && count($datasFerias) > 0) {
-                        echo "<table class='registro-table'>";
-                        echo "<tr><th>Período</th><th>Data Início</th><th>Data Fim</th></tr>";
-
-                        for ($i = 1; $i <= 3; $i++) {
-                            echo "<tr>";
-                            echo "<td>Período $i</td>";
-                            echo "<td>{$datasFerias['data_inicio_' .$i]}</td>";
-                            echo "<td>{$datasFerias['data_fim_' .$i]}</td>";
-                            echo "</tr>";
-                        }
-
-                        echo "</table>";
-                    } else {
-                        // Se $datasFerias não for um array ou estiver vazio, exiba uma mensagem
-                        echo "<p>Nenhum período de férias encontrado.</p>";
-                        echo "<p>Retorno da função listarDatasFerias: " . var_export($datasFerias, true) . "</p>";
-                    }
-                    ?>
-
+                        <?php for ($i = 1; $i <= 3; $i++) : ?>
+                            <?php if (!empty($registro['data_inicio_' . $i]) && !empty($registro['data_fim_' . $i])) : ?>
+                                <tr>
+                                    <td>Período <?php echo $i; ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($registro['data_inicio_' . $i])); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($registro['data_fim_' . $i])); ?></td>
+                                </tr>
+                            <?php endif; ?>
+                        <?php endfor; ?>
+                    </table>
                 <?php else : ?>
                     <p>Registro não encontrado.</p>
                 <?php endif; ?>
-                <button ><a href="listar.php" class="button-voltar"><i class="fas fa-arrow-left"></i> Voltar para Listagem</a></button>
+
+                <button><a href="listar.php" class="button-voltar"><i class="fas fa-arrow-left"></i> Voltar para Listagem</a></button>
             </div>
         </div>
+    </div>
+</body>
+
+</html>
