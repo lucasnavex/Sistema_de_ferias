@@ -3,7 +3,7 @@ require_once("dao/UserDAO.php");
 require_once("globals.php");
 require_once("db.php");
 include './dao/formulario.php';
-
+$userDAO = new UserDAO($conn, $BASE_URL);
 $crud = new Crud($conn);
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 

@@ -114,7 +114,8 @@ header h1 {
   color: #155f9b;
 }
 
-input[type="text"],
+
+input[ type="text"],
 input[type="password"],
 input [type="email"] {
   width: 100%;
@@ -159,8 +160,8 @@ form {
   padding: 20px;
   margin-top: 20px;
   box-sizing: border-box;
-  overflow-y: auto;
-  max-height: 80vh;
+  overflow-y: auto; 
+  max-height: 80vh; 
 }
 
 h2 {
@@ -279,8 +280,7 @@ a {
   padding: 20px;
 }
 
-.registro-table,
-.visualizar-container {
+.registro-table, .visualizar-container {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
@@ -304,7 +304,9 @@ a {
   background-color: #f2f2f2;
 }
 
+
 /* Estilo para a tabela de datas */
+
 
 .button-voltar a {
   display: inline-block;
@@ -321,5 +323,77 @@ a {
 }
 
 .visualizar-container {
-  width: 100vh;
+  width: 100vh ;
+}
+
+@media only screen and (max-width: 768px) {
+  /* Modificações para telas menores que 768px */
+
+  body {
+    /* Ajusta o espaçamento do conteúdo principal */
+    padding-top: 70px;
+  }
+
+  nav {
+    /* Ajusta o posicionamento e o dimensionamento do nav */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Garante que o nav esteja acima de outros elementos */
+  }
+  .container {
+    margin-top: 60px; /* Adiciona margem superior para evitar que o container se sobreponha ao nav */
+  }
+ 
+  .card {
+    /* Ajusta o tamanho do cartão */
+    width: 90%;
+    padding: 15px;
+  }
+
+  .card-header {
+    /* Ajusta o tamanho do texto no cabeçalho do cartão */
+    font-size: 20px;
+  }
+
+  .card-content-area {
+    /* Ajusta o espaçamento do conteúdo do cartão */
+    padding-left: 25px;
+  }
+
+  .card-content-area i {
+    /* Ajusta o tamanho do ícone nos campos de entrada */
+    font-size: 20px;
+  }
+
+  form {
+    /* Ajusta o tamanho do formulário */
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  form h1 {
+    /* Ajusta o tamanho do texto no cabeçalho do formulário */
+    font-size: 24px;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    /* Ajusta o tamanho dos campos de entrada */
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+  }
+
+  .submit {
+    /* Ajusta o tamanho do botão de envio */
+    padding: 12px 24px;
+    border-radius: 8px;
+    margin-top: 12px;
+  }
+
+  /* Outras modificações para tornar os elementos mais responsivos */
 }
