@@ -114,8 +114,7 @@ header h1 {
   color: #155f9b;
 }
 
-
-input[ type="text"],
+input[type="text"],
 input[type="password"],
 input [type="email"] {
   width: 100%;
@@ -160,8 +159,8 @@ form {
   padding: 20px;
   margin-top: 20px;
   box-sizing: border-box;
-  overflow-y: auto; 
-  max-height: 80vh; 
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
 h2 {
@@ -280,7 +279,8 @@ a {
   padding: 20px;
 }
 
-.registro-table, .visualizar-container {
+.registro-table,
+.visualizar-container {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
@@ -304,9 +304,7 @@ a {
   background-color: #f2f2f2;
 }
 
-
 /* Estilo para a tabela de datas */
-
 
 .button-voltar a {
   display: inline-block;
@@ -323,5 +321,5 @@ a {
 }
 
 .visualizar-container {
-  width: 160vh ;
+  width: 100vh;
 }
