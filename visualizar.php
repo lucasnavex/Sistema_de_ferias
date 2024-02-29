@@ -70,16 +70,16 @@ $registro = $id ? $crud->editar($id) : null;
                             <th>Período</th>
                             <th>Data Início</th>
                             <th>Data Fim</th>
-                            <th>Última Atualização</th> <!-- Nova coluna -->
                         </tr>
 
                         <?php for ($i = 1; $i <= 3; $i++) : ?>
-                            <tr>
-                                <td>Período <?php echo $i; ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($registro['data_inicio_' . $i])) ?? ''; ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($registro['data_fim_' . $i])) ?? ''; ?></td>
-                                <td><?php echo date('d/m/Y H:i:s', strtotime($registro['timestamp'])) ?? ''; ?></td>
-                            </tr>
+                            <?php if (!empty($registro['data_inicio_' . $i]) && !empty($registro['data_fim_' . $i])) : ?>
+                                <tr>
+                                    <td>Período <?php echo $i; ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($registro['data_inicio_' . $i])); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($registro['data_fim_' . $i])); ?></td>
+                                </tr>
+                            <?php endif; ?>
                         <?php endfor; ?>
                     </table>
                 <?php else : ?>
