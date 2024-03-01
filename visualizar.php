@@ -9,6 +9,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : null;
 
 // Obter o registro para exibir no formulário se for uma operação de visualização
 $registro = $id ? $crud->editar($id) : null;
+
 ?>
 
 <!DOCTYPE html>
@@ -56,9 +57,6 @@ $registro = $id ? $crud->editar($id) : null;
                 }
                 ?>
             </div>
-            <div class="right-menu">
-                <button><a href="cadastrar.php" class="nav-link">Novo Registro</a></button>
-            </div>
         </div>
 
         <div class="content">
@@ -86,6 +84,35 @@ $registro = $id ? $crud->editar($id) : null;
                     <p>Registro não encontrado.</p>
                 <?php endif; ?>
 
+                <?php
+                $historico = $crud->listarHistoricoParaRegistro($id);
+
+                if ($historico) :
+                ?>
+                    <h2>Histórico de Edições</h2>
+                    <table class='historico-table'>
+                        <thead>
+                            <tr>
+                                <th>Campo Editado</th>
+                                <th>Data Antiga</th>
+                                <th>Data Nova</th>
+                                <th>Data de Modificação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($historico as $edicao) : ?>
+                                <tr>
+                                    <td><?php echo $edicao['campo_editado']; ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($edicao['data_antiga'])); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($edicao['data_nova'])); ?></td>
+                                    <td><?php echo date('d/m/Y H:i:s', strtotime($edicao['data_modificacao'])); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else : ?>
+                    <p>Nenhuma edição encontrada para este registro.</p>
+                <?php endif; ?>
                 <button><a href="listar.php" class="button-voltar"><i class="fas fa-arrow-left"></i> Voltar para Listagem</a></button>
             </div>
         </div>

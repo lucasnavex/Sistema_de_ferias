@@ -144,6 +144,9 @@ class Crud
 
     public function atualizar($id, $nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $central, $gestor, $motivo_informacao, $qtd_periodos_ferias, $data_inicio_1, $data_fim_1, $data_inicio_2, $data_fim_2, $data_inicio_3, $data_fim_3)
     {
+        // Antes de realizar a atualização, obtenha os dados antigos para cada campo
+        $dadosAntigos = $this->editar($id);
+
         $sql = "UPDATE controle SET 
             nome = :nome,
             matricula_servidor = :matricula_servidor,
@@ -179,7 +182,61 @@ class Crud
         $stmt->bindParam(':data_fim_3', $data_fim_3);
         $stmt->bindParam(':id', $id);
 
+        $result = $stmt->execute();
+
+        // Após a atualização, registre as edições no histórico
+        if ($result) {
+            // Verifique e registre apenas as datas alteradas
+            $this->verificarRegistrarEdicaoHistorico('data_inicio_1', $dadosAntigos['data_inicio_1'], $data_inicio_1, $id);
+            $this->verificarRegistrarEdicaoHistorico('data_fim_1', $dadosAntigos['data_fim_1'], $data_fim_1, $id);
+            $this->verificarRegistrarEdicaoHistorico('data_inicio_2', $dadosAntigos['data_inicio_2'], $data_inicio_2, $id);
+            $this->verificarRegistrarEdicaoHistorico('data_fim_2', $dadosAntigos['data_fim_2'], $data_fim_2, $id);
+            $this->verificarRegistrarEdicaoHistorico('data_inicio_3', $dadosAntigos['data_inicio_3'], $data_inicio_3, $id);
+            $this->verificarRegistrarEdicaoHistorico('data_fim_3', $dadosAntigos['data_fim_3'], $data_fim_3, $id);
+        }
+
+        return $result;
+    }
+
+    public function verificarRegistrarEdicaoHistorico($campo, $dataAntiga, $dataNova, $idRegistro)
+    {
+        if ($dataAntiga != $dataNova) {
+            $this->registrarEdicaoHistorico($campo, $dataAntiga, $dataNova, $idRegistro);
+        }
+    }
+
+    public function registrarEdicaoHistorico($campo, $dataAntiga, $dataNova, $idRegistro)
+    {
+        $dataModificacao = date('Y-m-d H:i:s');
+        $sql = "INSERT INTO historico_edicoes (campo_editado, data_antiga, data_nova, data_modificacao, id_registro) 
+                VALUES (:campo, :data_antiga, :data_nova, :data_modificacao, :id_registro)";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':campo', $campo);
+        $stmt->bindParam(':data_antiga', $dataAntiga);
+        $stmt->bindParam(':data_nova', $dataNova);
+        $stmt->bindParam(':data_modificacao', $dataModificacao);
+        $stmt->bindParam(':id_registro', $idRegistro);
+
         return $stmt->execute();
+    }
+
+    public function listarHistoricoEdicoes($idRegistro)
+    {
+        $sql = "SELECT * FROM historico_edicoes WHERE id_registro = :id_registro ORDER BY data_modificacao DESC";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id_registro', $idRegistro, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Função para obter o histórico de edições para um registro específico
+    public function listarHistoricoParaRegistro($idRegistro)
+    {
+        $historico = $this->listarHistoricoEdicoes($idRegistro);
+
+        return $historico ?: [];
     }
 
     public function excluir($id)

@@ -280,7 +280,7 @@ a {
   padding: 20px;
 }
 
-.registro-table, .visualizar-container {
+.registro-table, .visualizar-container, .historico-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
@@ -288,6 +288,8 @@ a {
 
 .registro-table th,
 .registro-table td,
+.historico-table th,
+.historico-table td,
 .visualizar-container th,
 .visualizar-container td {
   border: 1px solid #ddd;
@@ -295,12 +297,14 @@ a {
   text-align: left;
 }
 
-.registro-table th {
+.registro-table th,
+.historico-table th {
   background-color: #155f9b;
   color: white;
 }
 
-.registro-table tr:nth-child(even) {
+.registro-table tr:nth-child(even),
+.historico-table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
