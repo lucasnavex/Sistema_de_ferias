@@ -105,7 +105,7 @@ $registro = $id ? $crud->editar($id) : null;
                                     <td><?php echo $edicao['campo_editado']; ?></td>
                                     <td><?php echo date('d/m/Y', strtotime($edicao['data_antiga'])); ?></td>
                                     <td><?php echo date('d/m/Y', strtotime($edicao['data_nova'])); ?></td>
-                                    <td><?php echo date('d/m/Y H:i:s', strtotime($edicao['data_modificacao'])); ?></td>
+                                    <td><?php echo date('d/m/Y', strtotime($edicao['data_modificacao'])); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
