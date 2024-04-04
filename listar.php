@@ -54,16 +54,57 @@ $userDAO = new UserDAO($conn, $BASE_URL);
                 }
                 ?>
             </div>
-            <div class="right-menu">                
+            <div class="right-menu">
                 <button><a href=" cadastro.php" class="nav-link">Cadastro</a></button>
                 <button><a href="cadastrar.php" class="nav-link">Novo Registro</a></button>
             </div>
         </div>
 
         <div class="content">
-            <?php
-            // Seu código PHP para exibir a tabela
-            $crud->listar();
-            ?>
+            <table class='registro-table'>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Matrícula</th>
+                        <th>Unidade de lotação</th>
+                        <th>Categoria Funcional</th>
+                        <th>Central</th>
+                        <th>Gestor</th>
+                        <th>Motivo da Informação</th>
+                        <th>Períodos de férias</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    // Obter os registros da função listar do Crud
+                    $registros = $crud->listar();
+
+                    // Verificar se há registros
+                    if ($registros) {
+                        // Iterar sobre os registros
+                        foreach ($registros as $registro) {
+                            echo "<tr>";
+                            echo "<td>{$registro['nome']}</td>";
+                            echo "<td>{$registro['matricula_servidor']}</td>";
+                            echo "<td>{$registro['unidade_lotacao']}</td>";
+                            echo "<td>{$registro['categoria_funcional']}</td>";
+                            echo "<td>{$registro['central']}</td>";
+                            echo "<td>" . ($registro['gestor'] == 1 ? 'Sim' : 'Não') . "</td>";
+                            echo "<td>{$registro['motivo_informacao']}</td>";
+                            echo "<td>{$registro['qtd_periodos_ferias']}</td>";
+                            echo "<td>
+                            <a href='visualizar.php?id={$registro['id']}'><i class='fas fa-eye'></i> </a>
+                            <a href='cadastrar.php?id={$registro['id']}'><i class='fas fa-edit'></i> </a>
+                            <a href='./deletar.php?id={$registro['id']}'><i class='fas fa-trash-alt'></i> </a>
+                        </td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='9'>Nenhum registro encontrado.</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
     </div>

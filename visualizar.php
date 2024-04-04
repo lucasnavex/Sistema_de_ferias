@@ -89,6 +89,7 @@ $registro = $id ? $crud->editar($id) : null;
 
                 if ($historico) :
                 ?>
+                    <br>
                     <h2>Histórico de Edições</h2>
                     <table class='historico-table'>
                         <thead>
