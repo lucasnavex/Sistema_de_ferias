@@ -36,6 +36,15 @@ class Crud
         return $result;
     }
 
+    public function listarPorUnidade($unidade_lotacao) {
+        $sql = "SELECT * FROM controle WHERE unidade_lotacao = :unidade_lotacao";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':unidade_lotacao', $unidade_lotacao, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+
     public function formatarPeriodosFerias($datasFerias)
     {
         $periodosFeriasFormatados = '';
@@ -83,6 +92,14 @@ class Crud
         return $datasFerias;
     }
 
+    public function listarUnidadesLotacao()
+    {
+        $sql = "SELECT DISTINCT unidade_lotacao FROM controle ORDER BY unidade_lotacao";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
 
     public function editar($id)
     {

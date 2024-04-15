@@ -6,7 +6,17 @@ require_once("db.php");
 
 
 $userDAO = new UserDAO($conn, $BASE_URL);
+
+if (isset($_GET['unidade_lotacao'])) {
+    $unidade_filtrada = $_GET['unidade_lotacao'];
+    $registros = $crud->listarPorUnidade($unidade_filtrada); 
+} else {
+    $registros = $crud->listar();
+}
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -40,11 +50,9 @@ $userDAO = new UserDAO($conn, $BASE_URL);
             <div class="left-menu">
                 <?php
                 if (isset($_SESSION['token'])) {
-                    // Pega o usuário autenticado
                     $user = $userDAO->findByToken($_SESSION['token']);
 
                     if ($user) {
-                        // Exibe o nome do usuário
                         echo "Olá, " . $_SESSION['usuario_nome'];
                     } else {
                         echo "Olá, Usuário";
@@ -61,6 +69,51 @@ $userDAO = new UserDAO($conn, $BASE_URL);
         </div>
 
         <div class="content">
+            <div action="" method="GET" class="filter-container">
+                <select class="filter-select" id="unidade_lotacao">
+                    <option value="">Selecione a Unidade de Lotação</option>
+                    <option value="11025050 - APS RIACHUELO">APS RIACHUELO</option>
+                    <option value="115251 - SERVICO DE GERENCIAMENTO DE BENEFICIOS">SERVIÇO DE GERENCIAMENTO DE BENEFÍCIOS</option>
+                    <option value="1152522 - SAREC">SAREC</option>
+                    <option value="11025110 - APS SAO JOAO NEPOMUCENO">APS SÃO JOÃO NEPOMUCENO</option>
+                    <option value="11025040 - APS SAO DIMAS">APS SÃO DIMAS</option>
+                    <option value="11025060 - APS LEOPOLDINA">APS LEOPOLDINA</option>
+                    <option value="11025080 - APS ALEM PARAIBA">APS ALÉM PARAÍBA</option>
+                    <option value="11025070 - APS MURIAE">APS MURIAÉ</option>
+                    <option value="11025010 - APS CARANGOLA">APS CARANGOLA</option>
+                    <option value="11025090 - APS PALMA">APS PALMA</option>
+                    <option value="11025020 - CATAGUASES">CATAGUASES</option>
+                    <option value="11025 - GERENCIA EXECUTIVA">GERÊNCIA EXECUTIVA</option>
+                    <option value="115252 - SGREC">SGREC</option>
+                </select>
+                <button class="filter-button" onclick="filterRecords()">Buscar</button>
+            </div>
+
+            <script>
+                function filterRecords() {
+                    const selectedValue = document.getElementById("unidade_lotacao").value;
+                    const rows = document.querySelectorAll(".registro-table tbody tr");
+                    let rowCount = 0;
+
+                    rows.forEach(row => {
+                        const cell = row.cells[2];
+                        if (selectedValue === "" || cell.textContent.includes(selectedValue)) {
+                            row.style.display = "";
+                            rowCount++;
+                        } else {
+                            row.style.display = "none";
+                        }
+                    });
+
+                    const noRecordsMessage = document.getElementById("no-records-message");
+                    if (rowCount === 0) {
+                        noRecordsMessage.style.display = "block";
+                    } else {
+                        noRecordsMessage.style.display = "none";
+                    }
+                }
+            </script>
+
             <table class='registro-table'>
                 <thead>
                     <tr>
@@ -97,7 +150,7 @@ $userDAO = new UserDAO($conn, $BASE_URL);
                             <a href='visualizar.php?id={$registro['id']}'><i class='fas fa-eye'></i> </a>
                             <a href='cadastrar.php?id={$registro['id']}'><i class='fas fa-edit'></i> </a>
                             <a href='./deletar.php?id={$registro['id']}'><i class='fas fa-trash-alt'></i> </a>
-                        </td>";
+                            </td>";
                             echo "</tr>";
                         }
                     } else {
@@ -106,5 +159,8 @@ $userDAO = new UserDAO($conn, $BASE_URL);
                     ?>
                 </tbody>
             </table>
+            <div id="no-records-message" class="no-records-message" style="display: none;">
+                Nenhum registro encontrado para a unidade de lotação selecionada.
+            </div>
         </div>
     </div>

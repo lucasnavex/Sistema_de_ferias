@@ -280,7 +280,9 @@ a {
   padding: 20px;
 }
 
-.registro-table, .visualizar-container, .historico-table {
+.registro-table,
+.visualizar-container,
+.historico-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
@@ -308,9 +310,7 @@ a {
   background-color: #f2f2f2;
 }
 
-
 /* Estilo para a tabela de datas */
-
 
 .button-voltar a {
   display: inline-block;
@@ -327,7 +327,48 @@ a {
 }
 
 .visualizar-container {
-  width: 100vh ;
+  width: 100vh;
+}
+
+/* Estilo para o filtro de busca */
+
+.filter-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.filter-select {
+  width: 40%;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.filter-button {
+  width: 100px; 
+  height: 40px;
+  margin-top: 10px;
+  background-color: #155f9b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+  background-color: #156bc7;
+  transition: background-color 0.3s ease;
+}
+
+.no-records-message {
+  text-align: start;
+  margin: 5px;
+  margin-top: 10px;
+  color: rgb(51, 52, 53);
 }
 
 @media only screen and (max-width: 768px) {
@@ -349,7 +390,7 @@ a {
   .container {
     margin-top: 60px; /* Adiciona margem superior para evitar que o container se sobreponha ao nav */
   }
- 
+
   .card {
     /* Ajusta o tamanho do cartão */
     width: 90%;
@@ -398,5 +439,4 @@ a {
     border-radius: 8px;
     margin-top: 12px;
   }
-
 }
