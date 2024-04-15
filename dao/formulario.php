@@ -36,14 +36,15 @@ class Crud
         return $result;
     }
 
-    public function listarPorUnidade($unidade_lotacao) {
+    public function listarPorUnidade($unidade_lotacao)
+    {
         $sql = "SELECT * FROM controle WHERE unidade_lotacao = :unidade_lotacao";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':unidade_lotacao', $unidade_lotacao, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
 
     public function formatarPeriodosFerias($datasFerias)
     {
@@ -99,7 +100,7 @@ class Crud
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
 
     public function editar($id)
     {
@@ -177,9 +178,14 @@ class Crud
 
     public function registrarEdicaoHistorico($campo, $dataAntiga, $dataNova, $idRegistro)
     {
+        // Verificar se a data antiga é '01/01/1970' e, se for, não registrar no histórico
+        if ($dataAntiga == '1970-01-01') {
+            return false;
+        }
+
         $dataModificacao = date('Y-m-d H:i:s');
         $sql = "INSERT INTO historico_edicoes (campo_editado, data_antiga, data_nova, data_modificacao, id_registro) 
-                VALUES (:campo, :data_antiga, :data_nova, :data_modificacao, :id_registro)";
+            VALUES (:campo, :data_antiga, :data_nova, :data_modificacao, :id_registro)";
 
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':campo', $campo);

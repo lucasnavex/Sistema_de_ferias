@@ -185,14 +185,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php for ($i = 1; $i <= 3; $i++) : ?>
                     <?php
                     // Verifica se há valores para os campos de data
-                    $data_inicio = isset($registro['data_inicio_' . $i]) ? date('Y-m-d', strtotime($registro['data_inicio_' . $i])) : '';
-                    $data_fim = isset($registro['data_fim_' . $i]) ? date('Y-m-d', strtotime($registro['data_fim_' . $i])) : '';
+                    $data_inicio = isset($registro['data_inicio_' . $i]) && $registro['data_inicio_' . $i] !== '1970-01-01' ? date('Y-m-d', strtotime($registro['data_inicio_' . $i])) : '';
+                    $data_fim = isset($registro['data_fim_' . $i]) && $registro['data_fim_' . $i] !== '1970-01-01' ? date('Y-m-d', strtotime($registro['data_fim_' . $i])) : '';
+
+                    // Verificar se a data é '01/01/1970' e, se for, definir como vazio
+                    if ($data_inicio == '1970-01-01') {
+                        $data_inicio = '';
+                    }
+
+                    if ($data_fim == '1970-01-01') {
+                        $data_fim = '';
+                    }
                     ?>
                     <!-- Campos de data para o período <?php echo $i; ?> -->
                     <label for="data_inicio_<?php echo $i; ?>" style="display: <?php echo ($data_inicio != '') ? 'block' : 'none'; ?>;">Data Início Período <?php echo $i; ?>:</label>
-                    <input type="date" name="data_inicio_<?php echo $i; ?>" id="data_inicio_<?php echo $i; ?>" style="display: <?php echo ($data_inicio != '') ? 'block' : 'none'; ?>;" value="<?php echo $data_inicio; ?>">
+                    <input type="date" name="data_inicio_<?php echo $i; ?>" id="data_inicio_<?php echo $i; ?>" style="display: <?php echo ($data_inicio != '') ? 'block' : 'none'; ?>;" value="<?php echo $data_inicio ? $data_inicio : ''; ?>">
                     <label for="data_fim_<?php echo $i; ?>" style="display: <?php echo ($data_fim != '') ? 'block' : 'none'; ?>;">Data Fim Período <?php echo $i; ?>:</label>
-                    <input type="date" name="data_fim_<?php echo $i; ?>" id="data_fim_<?php echo $i; ?>" style="display: <?php echo ($data_fim != '') ? 'block' : 'none'; ?>;" value="<?php echo $data_fim; ?>">
+                    <input type="date" name="data_fim_<?php echo $i; ?>" id="data_fim_<?php echo $i; ?>" style="display: <?php echo ($data_fim != '') ? 'block' : 'none'; ?>;" value="<?php echo $data_fim ? $data_fim : ''; ?>">
                 <?php endfor; ?>
             </div>
 
@@ -200,6 +209,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 document.getElementById('qtd_periodos_ferias').addEventListener('change', function() {
                     var qtdPeriodos = this.value;
                     var periodosDiv = document.getElementById('periodos_ferias');
+
+                    // Guardar os valores atuais dos campos de data
+                    var valoresAtuais = {};
+                    for (var i = 1; i <= 3; i++) {
+                        var dataInicio = document.getElementById('data_inicio_' + i);
+                        var dataFim = document.getElementById('data_fim_' + i);
+                        valoresAtuais['data_inicio_' + i] = dataInicio ? dataInicio.value : '';
+                        valoresAtuais['data_fim_' + i] = dataFim ? dataFim.value : '';
+                    }
 
                     // Remover todos os campos de data anteriores
                     periodosDiv.innerHTML = '';
@@ -215,6 +233,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         inputInicio.setAttribute('type', 'date');
                         inputInicio.setAttribute('name', 'data_inicio_' + i);
                         inputInicio.setAttribute('id', 'data_inicio_' + i);
+                        inputInicio.value = valoresAtuais['data_inicio_' + i] || '';
                         periodosDiv.appendChild(inputInicio);
 
                         var labelFim = document.createElement('label');
@@ -226,6 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         inputFim.setAttribute('type', 'date');
                         inputFim.setAttribute('name', 'data_fim_' + i);
                         inputFim.setAttribute('id', 'data_fim_' + i);
+                        inputFim.value = valoresAtuais['data_fim_' + i] || '';
                         periodosDiv.appendChild(inputFim);
 
                         periodosDiv.appendChild(document.createElement('br'));

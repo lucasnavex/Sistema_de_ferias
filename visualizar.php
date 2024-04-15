@@ -71,11 +71,15 @@ $registro = $id ? $crud->editar($id) : null;
                         </tr>
 
                         <?php for ($i = 1; $i <= 3; $i++) : ?>
-                            <?php if (!empty($registro['data_inicio_' . $i]) && !empty($registro['data_fim_' . $i])) : ?>
+                            <?php
+                            $dataInicio = isset($registro['data_inicio_' . $i]) && $registro['data_inicio_' . $i] != '0000-00-00' ? date('d/m/Y', strtotime($registro['data_inicio_' . $i])) : '';
+                            $dataFim = isset($registro['data_fim_' . $i]) && $registro['data_fim_' . $i] != '0000-00-00' ? date('d/m/Y', strtotime($registro['data_fim_' . $i])) : '';
+                            ?>
+                            <?php if (!empty($dataInicio) && !empty($dataFim)) : ?>
                                 <tr>
                                     <td>Período <?php echo $i; ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($registro['data_inicio_' . $i])); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($registro['data_fim_' . $i])); ?></td>
+                                    <td><?php echo $dataInicio; ?></td>
+                                    <td><?php echo $dataFim; ?></td>
                                 </tr>
                             <?php endif; ?>
                         <?php endfor; ?>
@@ -101,17 +105,30 @@ $registro = $id ? $crud->editar($id) : null;
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($historico as $edicao) : ?>
+                            <?php foreach ($historico as $item) : ?>
                                 <tr>
-                                    <td><?php echo $edicao['campo_editado']; ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($edicao['data_antiga'])); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($edicao['data_nova'])); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($edicao['data_modificacao'])); ?></td>
+                                    <td><?php
+                                        $campoEditado = str_replace('_', ' ', $item['campo_editado']);
+                                        echo ucwords($campoEditado);
+                                        ?></td>
+
+                                    <td>
+                                        <?php echo $item['data_antiga'] ? date('d/m/Y', strtotime($item['data_antiga'])) : '';
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $item['data_nova'] ? date('d/m/Y', strtotime($item['data_nova'])) : '';
+                                        ?>
+                                    </td>
+
+                                    <td>
+                                        <?php echo date('d/m/Y', strtotime($item['data_modificacao'])); ?>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-                <?php else : ?>
+                <?php else : ?><br>
                     <p>Nenhuma edição encontrada para este registro.</p>
                 <?php endif; ?>
                 <button><a href="listar.php" class="button-voltar"><i class="fas fa-arrow-left"></i> Voltar para Listagem</a></button>
