@@ -20,9 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Realize a validação aqui
-    if (empty($_POST['nome']) || empty($_POST['matricula_servidor']) || empty($_POST['unidade_lotacao']) || empty($_POST['categoria_funcional']) || empty($_POST['motivo_informacao']) || empty($_POST['qtd_periodos_ferias'])) {
+    if (
+        empty($_POST['nome']) ||
+        empty($_POST['matricula_servidor']) ||
+        empty($_POST['unidade_lotacao']) ||
+        empty($_POST['categoria_funcional']) ||
+        empty($_POST['qtd_periodos_ferias'])
+    ) {
         $validationErrors[] = "Todos os campos são obrigatórios.";
     }
+    
 
     if (!is_numeric($_POST['qtd_periodos_ferias']) || $_POST['qtd_periodos_ferias'] <= 0) {
         $validationErrors[] = "A quantidade de períodos de férias deve ser um número inteiro positivo.";
