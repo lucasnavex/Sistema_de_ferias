@@ -9,7 +9,7 @@ $userDAO = new UserDAO($conn, $BASE_URL);
 
 if (isset($_GET['unidade_lotacao'])) {
     $unidade_filtrada = $_GET['unidade_lotacao'];
-    $registros = $crud->listarPorUnidade($unidade_filtrada); 
+    $registros = $crud->listarPorUnidade($unidade_filtrada);
 } else {
     $registros = $crud->listar();
 }
@@ -65,6 +65,7 @@ if (isset($_GET['unidade_lotacao'])) {
             <div class="right-menu">
                 <button><a href=" cadastro.php" class="nav-link">Cadastro</a></button>
                 <button><a href="cadastrar.php" class="nav-link">Novo Registro</a></button>
+                <button><a href="index.php" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Sair</a></button>
             </div>
         </div>
 
@@ -159,6 +160,7 @@ if (isset($_GET['unidade_lotacao'])) {
                     ?>
                 </tbody>
             </table>
+
             <div id="no-records-message" class="no-records-message" style="display: none;">
                 Nenhum registro encontrado para a unidade de lotação selecionada.
             </div>
