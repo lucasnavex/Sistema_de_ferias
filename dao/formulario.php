@@ -218,17 +218,28 @@ class Crud
     public function excluir($id)
     {
         try {
+            
+            $queryHistorico = "DELETE FROM historico_edicoes WHERE id_registro = :id";
+            $stmtHistorico = $this->conn->prepare($queryHistorico);
+            $stmtHistorico->bindParam(':id', $id, PDO::PARAM_INT);
+
+            if (!$stmtHistorico->execute()) {
+                throw new Exception("Erro ao excluir registros dependentes da tabela historico_edicoes: " . implode(", ", $stmtHistorico->errorInfo()));
+            }
+
+            
             $query = "DELETE FROM controle WHERE id = :id";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
             if ($stmt->execute()) {
-                echo "Registro excluído com sucesso.";
+                return true;
             } else {
                 throw new Exception("Erro ao excluir o registro da tabela controle: " . implode(", ", $stmt->errorInfo()));
             }
         } catch (Exception $e) {
             echo "Erro: " . $e->getMessage();
+            return false;
         }
     }
 }

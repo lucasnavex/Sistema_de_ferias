@@ -14,6 +14,15 @@ if (isset($_GET['unidade_lotacao'])) {
     $registros = $crud->listar();
 }
 
+$msg = isset($_GET['msg']) ? $_GET['msg'] : null;
+
+if ($msg == "success") {
+    echo "<div class='msg success'>Registro excluído com sucesso.</div>";
+} elseif ($msg == "error") {
+    echo "<div class='msg error'>Erro ao excluir o registro.</div>";
+}
+
+
 ?>
 
 
@@ -112,7 +121,9 @@ if (isset($_GET['unidade_lotacao'])) {
                     } else {
                         noRecordsMessage.style.display = "none";
                     }
+
                 }
+                
             </script>
 
             <table class='registro-table'>
@@ -150,7 +161,7 @@ if (isset($_GET['unidade_lotacao'])) {
                             echo "<td>
                             <a href='visualizar.php?id={$registro['id']}'><i class='fas fa-eye'></i> </a>
                             <a href='cadastrar.php?id={$registro['id']}'><i class='fas fa-edit'></i> </a>
-                            <a href='./deletar.php?id={$registro['id']}'><i class='fas fa-trash-alt'></i> </a>
+                            <a href='deletar.php?id={$registro['id']}'><i class='fas fa-trash-alt'></i> </a>
                             </td>";
                             echo "</tr>";
                         }
