@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ) {
         $validationErrors[] = "Todos os campos são obrigatórios.";
     }
-    
+
 
     if (!is_numeric($_POST['qtd_periodos_ferias']) || $_POST['qtd_periodos_ferias'] <= 0) {
         $validationErrors[] = "A quantidade de períodos de férias deve ser um número inteiro positivo.";
@@ -110,8 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <nav>
+        <div class="title">Registros</div>
         <img src="./img/inss-logo.0e1a042d.png" alt="Logo" class="logo">
-        REGISTRO DE FÉRIAS
     </nav>
 
     <form action="?action=<?php echo $id ? 'atualizar&id=' . $id : 'cadastrar'; ?>" method="post">
@@ -159,10 +159,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <option value="Tecnico" <?php if (isset($registro['categoria_funcional']) && $registro['categoria_funcional'] == "Tecnico") echo "selected"; ?>>Técnico</option>
             </select>
 
-            <label for="central">Central:</label>
+            <label for="central">Central / APS:</label>
             <select name="central" id="central" required>
                 <option value="">Selecione...</option>
-                <option value="MAN" <?php if (isset($registro['central']) && $registro['central'] == "MAN") echo "selected"; ?>>MAN</option>
+                <option value="APS" <?php if (isset($registro['central']) && $registro['central'] == "APS") echo "selected"; ?>>APS</option>
                 <option value="MAN(BI)" <?php if (isset($registro['central']) && $registro['central'] == "MAN(BI)") echo "selected"; ?>>MAN(BI)</option>
                 <option value="RD" <?php if (isset($registro['central']) && $registro['central'] == "RD") echo "selected"; ?>>RD</option>
                 <option value="GEX" <?php if (isset($registro['central']) && $registro['central'] == "GEX") echo "selected"; ?>>GEX</option>
