@@ -45,7 +45,6 @@ class Crud
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
     public function formatarPeriodosFerias($datasFerias)
     {
         $periodosFeriasFormatados = '';

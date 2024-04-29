@@ -28,8 +28,8 @@ $registro = $id ? $crud->editar($id) : null;
 
 <body>
     <nav>
+        <div class="title">Registros</div>
         <img src="./img/inss-logo.0e1a042d.png" alt="Logo" class="logo">
-        Registros
     </nav>
 
     <?php if (!empty($flassMessage["msg"])) : ?>

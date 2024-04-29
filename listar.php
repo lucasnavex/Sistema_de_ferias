@@ -43,8 +43,8 @@ if ($msg == "success") {
 
 <body>
     <nav>
+        <div class="title">Registros</div>
         <img src="./img/inss-logo.0e1a042d.png" alt="Logo" class="logo">
-        Registros
     </nav>
 
     </div>
@@ -123,7 +123,6 @@ if ($msg == "success") {
                     }
 
                 }
-                
             </script>
 
             <table class='registro-table'>

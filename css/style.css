@@ -22,13 +22,28 @@ nav {
   color: white;
   font-size: 20px;
   font-style: normal;
-  font-weight: 800; /* Ajustado o valor para uma fonte mais negrita */
+  font-weight: 800;
   line-height: normal;
   text-transform: uppercase;
-  padding: 10px;
   width: 100%;
-  box-sizing: border-box; /* Garante que padding não aumente a largura */
+  height: 60px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.title {
+  flex: 1;
   text-align: left;
+}
+
+.logo {
+  margin-top: 5px;
+  margin-right: 10px;
+  width: 60px;
+  height: 40px;
 }
 
 /* Estilo para o Formulário de Login e Cadastro */
@@ -82,14 +97,6 @@ header {
   text-align: left;
   padding: 10px 0;
   margin-bottom: 10%;
-}
-
-.logo {
-  float: right;
-  margin-top: 10px;
-  margin-right: 10px;
-  width: 60px;
-  height: 40px;
 }
 
 header h1 {
@@ -348,7 +355,7 @@ a {
 }
 
 .filter-button {
-  width: 100px; 
+  width: 100px;
   height: 40px;
   margin-top: 10px;
   background-color: #155f9b;
