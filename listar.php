@@ -132,7 +132,7 @@ if ($msg == "success") {
                         <th>Matrícula</th>
                         <th>Unidade de lotação</th>
                         <th>Categoria Funcional</th>
-                        <th>Central</th>
+                        <th>Central / APS</th>
                         <th>Gestor</th>
                         <th>Motivo da Informação</th>
                         <th>Períodos de férias</th>
