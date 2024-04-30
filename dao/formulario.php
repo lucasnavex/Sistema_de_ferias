@@ -13,7 +13,7 @@ class Crud
     public function cadastrar($dados)
     {
         $sql = "INSERT INTO controle (nome, matricula_servidor, email, unidade_lotacao, categoria_funcional, central, gestor, motivo_informacao, qtd_periodos_ferias, data_inicio_1, data_fim_1, data_inicio_2, data_fim_2, data_inicio_3, data_fim_3) 
-                VALUES (:nome, :matricula_servidor, :email, :unidade_lotacao, :categoria_funcional, :central, :gestor, :motivo_informacao, :qtd_periodos_ferias, :data_inicio_1, :data_fim_1, :data_inicio_2, :data_fim_2, :data_inicio_3, :data_fim_3)";
+                VALUES (:nome, :matricula_servidor, :email,  :unidade_lotacao, :categoria_funcional, :central, :gestor, :motivo_informacao, :qtd_periodos_ferias, :data_inicio_1, :data_fim_1, :data_inicio_2, :data_fim_2, :data_inicio_3, :data_fim_3)";
 
         $stmt = $this->conn->prepare($sql);
         $result = $stmt->execute($dados);
@@ -139,7 +139,7 @@ class Crud
 
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':matricula_servidor', $matricula_servidor);
-        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(' :email', $email);
         $stmt->bindParam(':unidade_lotacao', $unidade_lotacao);
         $stmt->bindParam(':categoria_funcional', $categoria_funcional);
         $stmt->bindParam(':central', $central);
