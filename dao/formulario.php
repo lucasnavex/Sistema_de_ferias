@@ -12,8 +12,8 @@ class Crud
 
     public function cadastrar($dados)
     {
-        $sql = "INSERT INTO controle (nome, matricula_servidor, unidade_lotacao, categoria_funcional, central, gestor, motivo_informacao, qtd_periodos_ferias, data_inicio_1, data_fim_1, data_inicio_2, data_fim_2, data_inicio_3, data_fim_3) 
-                VALUES (:nome, :matricula_servidor, :unidade_lotacao, :categoria_funcional, :central, :gestor, :motivo_informacao, :qtd_periodos_ferias, :data_inicio_1, :data_fim_1, :data_inicio_2, :data_fim_2, :data_inicio_3, :data_fim_3)";
+        $sql = "INSERT INTO controle (nome, matricula_servidor, email, unidade_lotacao, categoria_funcional, central, gestor, motivo_informacao, qtd_periodos_ferias, data_inicio_1, data_fim_1, data_inicio_2, data_fim_2, data_inicio_3, data_fim_3) 
+                VALUES (:nome, :matricula_servidor, :email, :unidade_lotacao, :categoria_funcional, :central, :gestor, :motivo_informacao, :qtd_periodos_ferias, :data_inicio_1, :data_fim_1, :data_inicio_2, :data_fim_2, :data_inicio_3, :data_fim_3)";
 
         $stmt = $this->conn->prepare($sql);
         $result = $stmt->execute($dados);
@@ -113,13 +113,14 @@ class Crud
         return $result;
     }
 
-    public function atualizar($id, $nome, $matricula_servidor, $unidade_lotacao, $categoria_funcional, $central, $gestor, $motivo_informacao, $qtd_periodos_ferias, $data_inicio_1, $data_fim_1, $data_inicio_2, $data_fim_2, $data_inicio_3, $data_fim_3)
+    public function atualizar($id, $nome, $matricula_servidor, $email, $unidade_lotacao, $categoria_funcional, $central, $gestor, $motivo_informacao, $qtd_periodos_ferias, $data_inicio_1, $data_fim_1, $data_inicio_2, $data_fim_2, $data_inicio_3, $data_fim_3)
     {
         $dadosAntigos = $this->editar($id);
 
         $sql = "UPDATE controle SET 
             nome = :nome,
             matricula_servidor = :matricula_servidor,
+            email = :email,
             unidade_lotacao = :unidade_lotacao,
             categoria_funcional = :categoria_funcional,
             central = :central,
@@ -138,6 +139,7 @@ class Crud
 
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':matricula_servidor', $matricula_servidor);
+        $stmt->bindParam(':email', $email);
         $stmt->bindParam(':unidade_lotacao', $unidade_lotacao);
         $stmt->bindParam(':categoria_funcional', $categoria_funcional);
         $stmt->bindParam(':central', $central);
