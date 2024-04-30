@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dados = [
             ':nome' => $_POST['nome'],
             ':matricula_servidor' => $_POST['matricula_servidor'],
-            ':email' => $_POST['email'],
             ':unidade_lotacao' => $_POST['unidade_lotacao'],
             ':categoria_funcional' => $_POST['categoria_funcional'],
             ':central' => $_POST['central'],
@@ -134,9 +133,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Nome: <input type="text" class="input-cadastro" name="nome" value="<?php echo $registro['nome'] ?? ''; ?>" required>
             Matrícula do Servidor:
             <input type="text" name="matricula_servidor" class="input-cadastro" oninput="validarMatricula(this)" pattern="[0-9]{7}" title="Digite exatamente 7 números" value="<?php echo $registro['matricula_servidor'] ?? ''; ?>" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" class="input-cadastro" required>
-            <div id="email-error" class="error-message"></div>
             <label for="unidade_lotacao"> Unidade de Lotação:</label>
             <select name="unidade_lotacao" id="unidade_lotacao" required>
                 <option value="">Selecione...</option>
@@ -261,29 +257,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         periodosDiv.appendChild(document.createElement('br'));
                     }
-
-                    document.addEventListener("DOMContentLoaded", function() {
-                        var emailInput = document.getElementById("email");
-                        var emailError = document.getElementById("email-error");
-
-                        emailInput.addEventListener("input", function(event) {
-                            var email = event.target.value;
-                            if (!isValidEmail(email)) {
-                                emailError.textContent = "Por favor, insira um email válido.";
-                                emailError.style.display = "block";
-                            } else {
-                                emailError.textContent = "";
-                                emailError.style.display = "none";
-                            }
-                        });
-
-                        function isValidEmail(email) {
-                            // Expressão regular para validar email
-                            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                            return emailRegex.test(email);
-                        }
-                    });
-
                 });
             </script>
 
