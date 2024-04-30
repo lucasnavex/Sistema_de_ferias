@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Matrícula do Servidor:
             <input type="text" name="matricula_servidor" class="input-cadastro" oninput="validarMatricula(this)" pattern="[0-9]{7}" title="Digite exatamente 7 números" value="<?php echo $registro['matricula_servidor'] ?? ''; ?>" required>
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" class="input-cadastro" required>
+            <input type="email" id="email" name="email" class="input-cadastro"  value="<?php echo $registro['email'] ?? ''; ?>" required>
             <div id="email-error" class="error-message"></div>
             <label for="unidade_lotacao"> Unidade de Lotação:</label>
             <select name="unidade_lotacao" id="unidade_lotacao" required>

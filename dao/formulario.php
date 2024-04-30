@@ -139,7 +139,7 @@ class Crud
 
         $stmt->bindParam(':nome', $nome);
         $stmt->bindParam(':matricula_servidor', $matricula_servidor);
-        $stmt->bindParam(' :email', $email);
+        $stmt->bindParam(':email', $email);
         $stmt->bindParam(':unidade_lotacao', $unidade_lotacao);
         $stmt->bindParam(':categoria_funcional', $categoria_funcional);
         $stmt->bindParam(':central', $central);
