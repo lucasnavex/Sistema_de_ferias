@@ -8,6 +8,7 @@
     public $password;
     public $email;
     public $token;
+    public $gestor;
 
     public function getFullName(User $user) {
         return $user->name . " " . $user->lastname;

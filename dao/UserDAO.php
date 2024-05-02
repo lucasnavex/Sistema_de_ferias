@@ -25,13 +25,14 @@
       $user->email = $data["email"];
       $user->password = $data["password"];
       $user->token = $data["token"];
+      $stmt->bindParam(":gestor", $user->gestor, PDO::PARAM_BOOL);
 
       return $user;
 
     }
-
+    
     public function create(User $user, $authUser = false) {
-
+      
       $stmt = $this->conn->prepare("INSERT INTO users (
         name, lastname, email, password, token, gestor
       ) VALUES (
@@ -45,18 +46,38 @@
       $stmt->bindParam(":token", $user->token);
       $stmt->bindParam(":gestor", $user->gestor, PDO::PARAM_BOOL);
       
-
+      
       $stmt->execute();
-
+      
       // Autentica usuário caso venha da tela de registro
       if($authUser) {
-
+        
         $this->setTokenToSession($user->token);
-
+        
       }
-
+      
     }
+    
+    public function listarPorGestor($isGestor) {
+      $stmt = $this->conn->prepare("SELECT * FROM sua_tabela WHERE gestor = :is_gestor");
+      $stmt->bindParam(":is_gestor", $isGestor, PDO::PARAM_BOOL);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
 
+    public function isUserGestor($email) {
+      $stmt = $this->conn->prepare("SELECT gestor FROM users WHERE email = :email");
+      $stmt->bindParam(":email", $email);
+      $stmt->execute();
+  
+      if($stmt->rowCount() > 0) {
+          $data = $stmt->fetch();
+          return $data['gestor'] == 1; // Retorna true se o usuário é gestor (gestor = 1)
+      } else {
+          // Usuário não encontrado
+          return false;
+      }
+  }
     public function update(User $user) {
 
       $stmt = $this->conn->prepare("UPDATE users SET 

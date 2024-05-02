@@ -51,11 +51,18 @@ if ($type === "register") {
     $password = filter_input(INPUT_POST, "password");
 
     if ($userDao->authenticateUser($email, $password)) {
-        // Obtém o nome do usuário da sessão
-        $userName = isset($_SESSION['usuario_nome']) ? $_SESSION['usuario_nome'] : "Usuário";
-    
-        // Exibe mensagem ou realiza outras ações com o nome do usuário
-        echo "Seja bem-vindo, $userName!";
+        // Autenticação bem-sucedida
+
+        // Verifica se o usuário é um gestor
+        if ($userDao->isUserGestor($email)) {
+            // Usuário é um gestor, redireciona para gestor.php
+            header("Location: gestor.php");
+            exit(); // Certifica-se de que o script não continua após o redirecionamento
+        } else {
+            // Usuário não é um gestor, redireciona para listar.php
+            header("Location: listar.php");
+            exit(); // Certifica-se de que o script não continua após o redirecionamento
+        }
     } else {
         // Exibe mensagem de erro
         echo "Usuário ou senha incorretos";
